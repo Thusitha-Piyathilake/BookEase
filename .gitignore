@@ -1,0 +1,23 @@
+# Node
+node_modules
+
+# Build
+dist
+.next
+
+# Logs
+logs
+*.log
+
+# Environment
+.env
+
+# Coverage
+coverage
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
