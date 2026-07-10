@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 
 import { User } from '../../users/entities/user.entity/user.entity';
+import { Booking } from '../../bookings/entities/booking.entity';
 
 @Entity('services')
 export class Service {
@@ -51,6 +53,9 @@ export class Service {
     name: 'providerId',
   })
   provider!: User;
+
+  @OneToMany(() => Booking, (booking) => booking.service)
+  bookings!: Booking[];
 
   @CreateDateColumn()
   createdAt!: Date;
