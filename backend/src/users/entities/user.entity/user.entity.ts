@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { Service } from '../../../services/entities/service.entity';
 
 export enum UserRole {
   CUSTOMER = 'CUSTOMER',
@@ -39,6 +42,9 @@ export class User {
     default: UserRole.CUSTOMER,
   })
   role!: UserRole;
+
+  @OneToMany(() => Service, (service) => service.provider)
+  services!: Service[];
 
   @CreateDateColumn()
   createdAt!: Date;
