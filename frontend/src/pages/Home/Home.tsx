@@ -4,6 +4,7 @@ import ServicesSection from "../../components/common/ServicesSection";
 import Features from "../../components/common/Features";
 import HowItWorks from "../../components/common/HowItWorks";
 import Testimonials from "../../components/common/Testimonials";
+import CTA from "../../components/common/CTA";
 import Footer from "../../components/layout/Footer";
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
       <Features />
       <HowItWorks />
       <Testimonials />
+      <CTA />
       <Footer />
     </>
   );
