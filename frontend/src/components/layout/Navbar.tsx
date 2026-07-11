@@ -1,4 +1,5 @@
 import "./Navbar.css";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
@@ -6,19 +7,36 @@ export default function Navbar() {
       <div className="container navbar-container">
 
         <div className="logo">
-          Book<span>Ease</span>
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+            }}
+          >
+            Book<span>Ease</span>
+          </Link>
         </div>
 
         <nav className="nav-links">
-          <a href="#">Home</a>
-          <a href="#">Services</a>
-          <a href="#">About</a>
-          <a href="#">Contact</a>
+          <Link to="/">Home</Link>
+          <a href="#services">Services</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
         </nav>
 
         <div className="nav-buttons">
-          <button className="login-btn">Login</button>
-          <button className="register-btn">Register</button>
+          <Link to="/login">
+            <button className="login-btn">
+              Login
+            </button>
+          </Link>
+
+          <Link to="/register">
+            <button className="register-btn">
+              Register
+            </button>
+          </Link>
         </div>
 
       </div>

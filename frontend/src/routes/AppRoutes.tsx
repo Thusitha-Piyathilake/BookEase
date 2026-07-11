@@ -12,20 +12,20 @@ export default function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+<Route path="/login" element={<Login />} />
+<Route path="/register" element={<Register />} />
 
-        <Route
-          path="/customer/dashboard"
-          element={<CustomerDashboard />}
-        />
+<Route
+  path="/customer/dashboard"
+  element={<CustomerDashboard />}
+/>
 
-        <Route
-          path="/provider/dashboard"
-          element={<ProviderDashboard />}
-        />
+<Route
+  path="/provider/dashboard"
+  element={<ProviderDashboard />}
+/>
 
-        <Route path="*" element={<NotFound />} />
+<Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
