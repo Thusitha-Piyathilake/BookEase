@@ -43,6 +43,52 @@ export class BookingsController {
     );
   }
 
+  @Get('customer')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.CUSTOMER)
+  findCustomerBookings(
+    @GetUser() user: any,
+  ) {
+    return this.bookingsService.findCustomerBookings(
+      user.id,
+    );
+  }
+
+  @Get('customer/upcoming')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.CUSTOMER)
+  findCustomerUpcomingBookings(
+    @GetUser() user: any,
+  ) {
+    return this.bookingsService.findCustomerUpcomingBookings(
+      user.id,
+    );
+  }
+
+  @Get('customer/history')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.CUSTOMER)
+  findCustomerBookingHistory(
+    @GetUser() user: any,
+  ) {
+    return this.bookingsService.findCustomerBookingHistory(
+      user.id,
+    );
+  }
+
+  @Patch(':id/customer-cancel')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.CUSTOMER)
+  customerCancelBooking(
+    @Param('id') id: string,
+    @GetUser() user: any,
+  ) {
+    return this.bookingsService.customerCancelBooking(
+      id,
+      user.id,
+    );
+  }
+
   // ==========================
   // PROVIDER
   // ==========================

@@ -97,6 +97,87 @@ export class BookingsService {
   }
 
   // ===============================
+  // Customer Features
+  // ===============================
+
+  async findCustomerBookings(
+    customerId: string,
+  ): Promise<Booking[]> {
+    return this.bookingsRepository.find({
+      where: {
+        customer: {
+          id: customerId,
+        },
+      },
+      order: {
+        bookingDate: 'ASC',
+        bookingTime: 'ASC',
+      },
+    });
+  }
+
+  async findCustomerUpcomingBookings(
+    customerId: string,
+  ): Promise<Booking[]> {
+    return this.bookingsRepository
+      .createQueryBuilder('booking')
+      .leftJoinAndSelect('booking.customer', 'customer')
+      .leftJoinAndSelect('booking.provider', 'provider')
+      .leftJoinAndSelect('booking.service', 'service')
+      .where('customer.id = :customerId', {
+        customerId,
+      })
+      .andWhere('booking.status IN (:...statuses)', {
+        statuses: [
+          BookingStatus.PENDING,
+          BookingStatus.CONFIRMED,
+        ],
+      })
+      .orderBy('booking.bookingDate', 'ASC')
+      .addOrderBy('booking.bookingTime', 'ASC')
+      .getMany();
+  }
+
+  async findCustomerBookingHistory(
+  customerId: string,
+): Promise<Booking[]> {
+  return this.bookingsRepository
+    .createQueryBuilder('booking')
+    .leftJoinAndSelect('booking.customer', 'customer')
+    .leftJoinAndSelect('booking.provider', 'provider')
+    .leftJoinAndSelect('booking.service', 'service')
+    .where('customer.id = :customerId', {
+      customerId,
+    })
+    .andWhere('booking.status IN (:...statuses)', {
+      statuses: [
+        BookingStatus.COMPLETED,
+        BookingStatus.CANCELLED,
+      ],
+    })
+    .orderBy('booking.bookingDate', 'DESC')
+    .addOrderBy('booking.bookingTime', 'DESC')
+    .getMany();
+}
+
+  async customerCancelBooking(
+    bookingId: string,
+    customerId: string,
+  ): Promise<Booking> {
+    const booking = await this.findOne(bookingId);
+
+    if (booking.customer.id !== customerId) {
+      throw new ForbiddenException(
+        'You are not allowed to cancel this booking.',
+      );
+    }
+
+    booking.status = BookingStatus.CANCELLED;
+
+    return this.bookingsRepository.save(booking);
+  }
+
+  // ===============================
   // Provider Features
   // ===============================
 
