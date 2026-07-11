@@ -1,0 +1,63 @@
+.recent-bookings{
+    margin-top:40px;
+    background:#ffffff;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.table-header{
+    margin-bottom:20px;
+}
+
+.table-header h2{
+    color:#A31D1D;
+    font-size:26px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#F8F2DE;
+}
+
+th{
+    text-align:left;
+    padding:16px;
+    color:#A31D1D;
+    font-size:15px;
+}
+
+td{
+    padding:16px;
+    border-bottom:1px solid #eee;
+}
+
+tbody tr:hover{
+    background:#fafafa;
+}
+
+.status{
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.pending{
+    background:#FFF4CC;
+    color:#B7791F;
+}
+
+.accepted{
+    background:#DCFCE7;
+    color:#15803D;
+}
+
+.completed{
+    background:#DBEAFE;
+    color:#1D4ED8;
+}

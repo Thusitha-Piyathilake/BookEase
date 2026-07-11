@@ -1,0 +1,60 @@
+.service-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#fff;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.service-card img{
+    width:90px;
+    height:90px;
+    border-radius:12px;
+    object-fit:cover;
+}
+
+.service-info{
+    flex:1;
+    margin-left:25px;
+}
+
+.service-info h3{
+    color:#A31D1D;
+    margin-bottom:8px;
+}
+
+.service-info p{
+    color:#777;
+}
+
+.service-info h2{
+    margin-top:10px;
+    color:#D84040;
+}
+
+.service-actions{
+    display:flex;
+    gap:12px;
+}
+
+.edit-btn,
+.delete-btn{
+    border:none;
+    padding:12px 22px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.edit-btn{
+    background:#D84040;
+    color:white;
+}
+
+.delete-btn{
+    background:#A31D1D;
+    color:white;
+}

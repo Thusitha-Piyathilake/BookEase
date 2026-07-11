@@ -6,6 +6,7 @@ import Register from "../pages/Register/Register";
 import CustomerDashboard from "../pages/Customer/Dashboard";
 import ProviderDashboard from "../pages/Provider/Dashboard";
 import NotFound from "../pages/NotFound/NotFound";
+import MyServices from "../pages/Provider/MyServices";
 
 export default function AppRoutes() {
   return (
@@ -23,6 +24,11 @@ export default function AppRoutes() {
 <Route
   path="/provider/dashboard"
   element={<ProviderDashboard />}
+/>
+
+<Route
+  path="/provider/services"
+  element={<MyServices />}
 />
 
 <Route path="*" element={<NotFound />} />
