@@ -1,5 +1,6 @@
 import Navbar from "../../components/layout/Navbar";
 import Hero from "../../components/common/Hero";
+import ServicesSection from "../../components/common/ServicesSection";
 import Footer from "../../components/layout/Footer";
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
     <>
       <Navbar />
       <Hero />
+      <ServicesSection />
       <Footer />
     </>
   );
