@@ -6,11 +6,19 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
+
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { GetUser } from '../common/decorators/get-user.decorator';
+
+import { UserRole } from '../users/entities/user.entity/user.entity';
 
 @Controller('bookings')
 export class BookingsController {
@@ -19,8 +27,16 @@ export class BookingsController {
   ) {}
 
   @Post()
-  create(@Body() createBookingDto: CreateBookingDto) {
-    return this.bookingsService.create(createBookingDto);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.CUSTOMER)
+  create(
+    @Body() createBookingDto: CreateBookingDto,
+    @GetUser() user: any,
+  ) {
+    return this.bookingsService.create(
+      createBookingDto,
+      user.id,
+    );
   }
 
   @Get()
@@ -29,7 +45,9 @@ export class BookingsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(
+    @Param('id') id: string,
+  ) {
     return this.bookingsService.findOne(id);
   }
 
@@ -38,11 +56,16 @@ export class BookingsController {
     @Param('id') id: string,
     @Body() updateBookingDto: UpdateBookingDto,
   ) {
-    return this.bookingsService.update(id, updateBookingDto);
+    return this.bookingsService.update(
+      id,
+      updateBookingDto,
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(
+    @Param('id') id: string,
+  ) {
     return this.bookingsService.remove(id);
   }
 }
