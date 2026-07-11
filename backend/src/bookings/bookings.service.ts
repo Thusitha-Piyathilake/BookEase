@@ -1,6 +1,7 @@
 import {
   Injectable,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -84,10 +85,7 @@ export class BookingsService {
   ): Promise<Booking> {
     await this.findOne(id);
 
-    await this.bookingsRepository.update(
-      id,
-      updateBookingDto,
-    );
+    await this.bookingsRepository.update(id, updateBookingDto);
 
     return this.findOne(id);
   }
@@ -96,5 +94,76 @@ export class BookingsService {
     await this.findOne(id);
 
     await this.bookingsRepository.delete(id);
+  }
+
+  // ===============================
+  // Provider Features
+  // ===============================
+
+  async findProviderBookings(
+    providerId: string,
+  ): Promise<Booking[]> {
+    return this.bookingsRepository.find({
+      where: {
+        provider: {
+          id: providerId,
+        },
+      },
+      order: {
+        bookingDate: 'ASC',
+        bookingTime: 'ASC',
+      },
+    });
+  }
+
+  async confirmBooking(
+    bookingId: string,
+    providerId: string,
+  ): Promise<Booking> {
+    const booking = await this.findOne(bookingId);
+
+    if (booking.provider.id !== providerId) {
+      throw new ForbiddenException(
+        'You are not allowed to confirm this booking.',
+      );
+    }
+
+    booking.status = BookingStatus.CONFIRMED;
+
+    return this.bookingsRepository.save(booking);
+  }
+
+  async cancelBooking(
+    bookingId: string,
+    providerId: string,
+  ): Promise<Booking> {
+    const booking = await this.findOne(bookingId);
+
+    if (booking.provider.id !== providerId) {
+      throw new ForbiddenException(
+        'You are not allowed to cancel this booking.',
+      );
+    }
+
+    booking.status = BookingStatus.CANCELLED;
+
+    return this.bookingsRepository.save(booking);
+  }
+
+  async completeBooking(
+    bookingId: string,
+    providerId: string,
+  ): Promise<Booking> {
+    const booking = await this.findOne(bookingId);
+
+    if (booking.provider.id !== providerId) {
+      throw new ForbiddenException(
+        'You are not allowed to complete this booking.',
+      );
+    }
+
+    booking.status = BookingStatus.COMPLETED;
+
+    return this.bookingsRepository.save(booking);
   }
 }

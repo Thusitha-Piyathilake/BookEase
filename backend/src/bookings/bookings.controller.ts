@@ -26,6 +26,10 @@ export class BookingsController {
     private readonly bookingsService: BookingsService,
   ) {}
 
+  // ==========================
+  // CUSTOMER
+  // ==========================
+
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.CUSTOMER)
@@ -38,6 +42,64 @@ export class BookingsController {
       user.id,
     );
   }
+
+  // ==========================
+  // PROVIDER
+  // ==========================
+
+  @Get('provider')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.PROVIDER)
+  findProviderBookings(
+    @GetUser() user: any,
+  ) {
+    return this.bookingsService.findProviderBookings(
+      user.id,
+    );
+  }
+
+  @Patch(':id/confirm')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.PROVIDER)
+  confirmBooking(
+    @Param('id') id: string,
+    @GetUser() user: any,
+  ) {
+    return this.bookingsService.confirmBooking(
+      id,
+      user.id,
+    );
+  }
+
+  @Patch(':id/cancel')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.PROVIDER)
+  cancelBooking(
+    @Param('id') id: string,
+    @GetUser() user: any,
+  ) {
+    return this.bookingsService.cancelBooking(
+      id,
+      user.id,
+    );
+  }
+
+  @Patch(':id/complete')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.PROVIDER)
+  completeBooking(
+    @Param('id') id: string,
+    @GetUser() user: any,
+  ) {
+    return this.bookingsService.completeBooking(
+      id,
+      user.id,
+    );
+  }
+
+  // ==========================
+  // GENERAL
+  // ==========================
 
   @Get()
   findAll() {
