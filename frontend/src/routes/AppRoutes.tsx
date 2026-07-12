@@ -7,6 +7,8 @@ import CustomerDashboard from "../pages/Customer/Dashboard";
 import ProviderDashboard from "../pages/Provider/Dashboard";
 import NotFound from "../pages/NotFound/NotFound";
 import MyServices from "../pages/Provider/MyServices";
+import AddService from "../pages/Provider/AddService";
+import EditService from "../pages/Provider/EditService";
 
 export default function AppRoutes() {
   return (
@@ -24,6 +26,16 @@ export default function AppRoutes() {
 <Route
   path="/provider/dashboard"
   element={<ProviderDashboard />}
+/>
+
+<Route
+  path="/provider/edit-service/:id"
+  element={<EditService />}
+/>
+
+<Route
+  path="/provider/add-service"
+  element={<AddService />}
 />
 
 <Route

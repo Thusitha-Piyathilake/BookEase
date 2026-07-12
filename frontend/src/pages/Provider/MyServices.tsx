@@ -1,8 +1,56 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import ProviderSidebar from "../../components/provider/ProviderSidebar";
 import ProviderTopbar from "../../components/provider/ProviderTopbar";
 import ServiceCard from "../../components/provider/ServiceCard";
 
+import serviceService from "../../services/serviceService";
+import type { Service } from "../../services/serviceService";
+
 export default function MyServices() {
+  const navigate = useNavigate();
+
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadServices = async () => {
+    try {
+      const data = await serviceService.getMyServices();
+      setServices(data);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to load services.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadServices();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this service?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await serviceService.deleteService(id);
+
+      setServices((prev) =>
+        prev.filter((service) => service.id !== id)
+      );
+
+      alert("Service deleted successfully.");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete service.");
+    }
+  };
+
   return (
     <>
       <ProviderSidebar />
@@ -55,31 +103,53 @@ export default function MyServices() {
               fontWeight: 600,
               fontSize: "15px",
             }}
+            onClick={() => navigate("/provider/add-service")}
           >
             + Add Service
           </button>
         </div>
 
-        <ServiceCard
-          image="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600"
-          title="House Cleaning"
-          category="Cleaning"
-          price={5000}
-        />
+        {loading ? (
+          <h3>Loading services...</h3>
+        ) : services.length === 0 ? (
+          <div
+            style={{
+              background: "#fff",
+              padding: "40px",
+              borderRadius: "16px",
+              textAlign: "center",
+              boxShadow: "0 10px 30px rgba(0,0,0,.08)",
+            }}
+          >
+            <h2>No services found</h2>
 
-        <ServiceCard
-          image="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600"
-          title="Plumbing"
-          category="Home Repair"
-          price={3500}
-        />
-
-        <ServiceCard
-          image="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600"
-          title="Painting"
-          category="Painting"
-          price={7000}
-        />
+            <p
+              style={{
+                color: "#666",
+                marginTop: "10px",
+              }}
+            >
+              Click "Add Service" to create your first service.
+            </p>
+          </div>
+        ) : (
+          services.map((service) => (
+            <ServiceCard
+              key={service.id}
+              image={
+                service.imageUrl ||
+                "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600"
+              }
+              title={service.title}
+              category={service.category}
+              price={service.price}
+              onEdit={() =>
+                navigate(`/provider/edit-service/${service.id}`)
+              }
+              onDelete={() => handleDelete(service.id)}
+            />
+          ))
+        )}
       </main>
     </>
   );
