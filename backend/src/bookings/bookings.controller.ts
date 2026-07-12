@@ -7,11 +7,13 @@ import {
   Patch,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
+import { QueryBookingDto } from './dto/query-booking.dto';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -48,9 +50,11 @@ export class BookingsController {
   @Roles(UserRole.CUSTOMER)
   findCustomerBookings(
     @GetUser() user: any,
+    @Query() query: QueryBookingDto,
   ) {
     return this.bookingsService.findCustomerBookings(
       user.id,
+      query,
     );
   }
 
@@ -98,9 +102,11 @@ export class BookingsController {
   @Roles(UserRole.PROVIDER)
   findProviderBookings(
     @GetUser() user: any,
+    @Query() query: QueryBookingDto,
   ) {
     return this.bookingsService.findProviderBookings(
       user.id,
+      query,
     );
   }
 

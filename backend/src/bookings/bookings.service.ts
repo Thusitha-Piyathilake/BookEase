@@ -2,9 +2,10 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 
 import { Booking, BookingStatus } from './entities/booking.entity';
 import { CreateBookingDto } from './dto/create-booking.dto';
@@ -12,6 +13,7 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
 
 import { Service } from '../services/entities/service.entity';
 import { User } from '../users/entities/user.entity/user.entity';
+import { QueryBookingDto } from './dto/query-booking.dto';
 
 @Injectable()
 export class BookingsService {
@@ -44,6 +46,34 @@ export class BookingsService {
 
     if (!service) {
       throw new NotFoundException('Service not found');
+    }
+
+    // ==========================================
+    // Prevent duplicate bookings
+    // ==========================================
+
+    const existingBooking =
+      await this.bookingsRepository.findOne({
+        where: {
+          customer: {
+            id: customerId,
+          },
+          service: {
+            id: service.id,
+          },
+          bookingDate: createBookingDto.bookingDate,
+          bookingTime: createBookingDto.bookingTime,
+          status: In([
+            BookingStatus.PENDING,
+            BookingStatus.CONFIRMED,
+          ]),
+        },
+      });
+
+    if (existingBooking) {
+      throw new ConflictException(
+        'You already have a booking for this service at the selected date and time.',
+      );
     }
 
     const booking = this.bookingsRepository.create({
@@ -101,20 +131,76 @@ export class BookingsService {
   // ===============================
 
   async findCustomerBookings(
-    customerId: string,
-  ): Promise<Booking[]> {
-    return this.bookingsRepository.find({
-      where: {
-        customer: {
-          id: customerId,
-        },
+  customerId: string,
+  query: QueryBookingDto,
+): Promise<Booking[]> {
+  const {
+    search,
+    status,
+    page = 1,
+    limit = 10,
+  } = query;
+
+  const qb =
+    this.bookingsRepository.createQueryBuilder(
+      'booking',
+    );
+
+  qb.leftJoinAndSelect(
+    'booking.customer',
+    'customer',
+  );
+
+  qb.leftJoinAndSelect(
+    'booking.provider',
+    'provider',
+  );
+
+  qb.leftJoinAndSelect(
+    'booking.service',
+    'service',
+  );
+
+  qb.where('customer.id = :customerId', {
+    customerId,
+  });
+
+  if (status) {
+    qb.andWhere(
+      'booking.status = :status',
+      {
+        status,
       },
-      order: {
-        bookingDate: 'ASC',
-        bookingTime: 'ASC',
-      },
-    });
+    );
   }
+
+  if (search) {
+    qb.andWhere(
+      `(service.title ILIKE :search
+        OR service.category ILIKE :search
+        OR provider.name ILIKE :search)`,
+      {
+        search: `%${search}%`,
+      },
+    );
+  }
+
+  qb.orderBy(
+    'booking.bookingDate',
+    'DESC',
+  );
+
+  qb.addOrderBy(
+    'booking.bookingTime',
+    'DESC',
+  );
+
+  qb.skip((page - 1) * limit);
+
+  qb.take(limit);
+
+  return qb.getMany();
+}
 
   async findCustomerUpcomingBookings(
     customerId: string,
@@ -139,26 +225,26 @@ export class BookingsService {
   }
 
   async findCustomerBookingHistory(
-  customerId: string,
-): Promise<Booking[]> {
-  return this.bookingsRepository
-    .createQueryBuilder('booking')
-    .leftJoinAndSelect('booking.customer', 'customer')
-    .leftJoinAndSelect('booking.provider', 'provider')
-    .leftJoinAndSelect('booking.service', 'service')
-    .where('customer.id = :customerId', {
-      customerId,
-    })
-    .andWhere('booking.status IN (:...statuses)', {
-      statuses: [
-        BookingStatus.COMPLETED,
-        BookingStatus.CANCELLED,
-      ],
-    })
-    .orderBy('booking.bookingDate', 'DESC')
-    .addOrderBy('booking.bookingTime', 'DESC')
-    .getMany();
-}
+    customerId: string,
+  ): Promise<Booking[]> {
+    return this.bookingsRepository
+      .createQueryBuilder('booking')
+      .leftJoinAndSelect('booking.customer', 'customer')
+      .leftJoinAndSelect('booking.provider', 'provider')
+      .leftJoinAndSelect('booking.service', 'service')
+      .where('customer.id = :customerId', {
+        customerId,
+      })
+      .andWhere('booking.status IN (:...statuses)', {
+        statuses: [
+          BookingStatus.COMPLETED,
+          BookingStatus.CANCELLED,
+        ],
+      })
+      .orderBy('booking.bookingDate', 'DESC')
+      .addOrderBy('booking.bookingTime', 'DESC')
+      .getMany();
+  }
 
   async customerCancelBooking(
     bookingId: string,
@@ -182,20 +268,76 @@ export class BookingsService {
   // ===============================
 
   async findProviderBookings(
-    providerId: string,
-  ): Promise<Booking[]> {
-    return this.bookingsRepository.find({
-      where: {
-        provider: {
-          id: providerId,
-        },
+  providerId: string,
+  query: QueryBookingDto,
+): Promise<Booking[]> {
+  const {
+    search,
+    status,
+    page = 1,
+    limit = 10,
+  } = query;
+
+  const qb =
+    this.bookingsRepository.createQueryBuilder(
+      'booking',
+    );
+
+  qb.leftJoinAndSelect(
+    'booking.customer',
+    'customer',
+  );
+
+  qb.leftJoinAndSelect(
+    'booking.provider',
+    'provider',
+  );
+
+  qb.leftJoinAndSelect(
+    'booking.service',
+    'service',
+  );
+
+  qb.where('provider.id = :providerId', {
+    providerId,
+  });
+
+  if (status) {
+    qb.andWhere(
+      'booking.status = :status',
+      {
+        status,
       },
-      order: {
-        bookingDate: 'ASC',
-        bookingTime: 'ASC',
-      },
-    });
+    );
   }
+
+  if (search) {
+    qb.andWhere(
+      `(customer.name ILIKE :search
+        OR service.title ILIKE :search
+        OR service.category ILIKE :search)`,
+      {
+        search: `%${search}%`,
+      },
+    );
+  }
+
+  qb.orderBy(
+    'booking.bookingDate',
+    'DESC',
+  );
+
+  qb.addOrderBy(
+    'booking.bookingTime',
+    'DESC',
+  );
+
+  qb.skip((page - 1) * limit);
+
+  qb.take(limit);
+
+  return qb.getMany();
+}
 
   async confirmBooking(
     bookingId: string,

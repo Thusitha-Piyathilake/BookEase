@@ -10,15 +10,30 @@ import type { Booking } from "../../services/bookingService";
 export default function MyBookings() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+
+  const [page, setPage] = useState(1);
+  const limit = 5;
+
   const navigate = useNavigate();
 
   useEffect(() => {
     loadBookings();
-  }, []);
+  }, [page, search, status]);
 
   const loadBookings = async () => {
     try {
-      const data = await bookingService.getMyBookings();
+      setLoading(true);
+
+      const data = await bookingService.getMyBookings({
+        page,
+        limit,
+        search,
+        status,
+      });
+
       setBookings(data);
     } catch (error) {
       console.error(error);
@@ -87,14 +102,49 @@ export default function MyBookings() {
           My Bookings
         </h1>
 
-        <p
+        <div
           style={{
-            color: "#666",
+            display: "flex",
+            gap: "15px",
             marginBottom: "30px",
           }}
         >
-          Manage all your bookings.
-        </p>
+          <input
+            type="text"
+            placeholder="Search service..."
+            value={search}
+            onChange={(e) => {
+              setPage(1);
+              setSearch(e.target.value);
+            }}
+            style={{
+              flex: 1,
+              padding: "14px",
+              borderRadius: "12px",
+              border: "1px solid #ddd",
+            }}
+          />
+
+          <select
+            value={status}
+            onChange={(e) => {
+              setPage(1);
+              setStatus(e.target.value);
+            }}
+            style={{
+              width: "220px",
+              padding: "14px",
+              borderRadius: "12px",
+              border: "1px solid #ddd",
+            }}
+          >
+            <option value="">All Status</option>
+            <option value="PENDING">Pending</option>
+            <option value="CONFIRMED">Confirmed</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
+        </div>
 
         {loading ? (
           <h2>Loading...</h2>
@@ -210,54 +260,103 @@ export default function MyBookings() {
                 </span>
 
                 {booking.status === "PENDING" && (
-  <>
-    <br />
-    <br />
+                  <>
+                    <br />
+                    <br />
 
-    <button
-      onClick={() => cancelBooking(booking.id)}
-      style={{
-        background: "#D84040",
-        color: "#fff",
-        border: "none",
-        padding: "12px 22px",
-        borderRadius: "10px",
-        cursor: "pointer",
-        fontWeight: 600,
-      }}
-    >
-      Cancel Booking
-    </button>
-  </>
-)}
+                    <button
+                      onClick={() => cancelBooking(booking.id)}
+                      style={{
+                        background: "#D84040",
+                        color: "#fff",
+                        border: "none",
+                        padding: "12px 22px",
+                        borderRadius: "10px",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Cancel Booking
+                    </button>
+                  </>
+                )}
 
-{booking.status === "COMPLETED" && (
-  <>
-    <br />
-    <br />
+                {booking.status === "COMPLETED" && (
+                  <>
+                    <br />
+                    <br />
 
-    <button
-      onClick={() =>
-        navigate(`/customer/review/${booking.id}`)
-      }
-      style={{
-        background: "#1565C0",
-        color: "#fff",
-        border: "none",
-        padding: "12px 22px",
-        borderRadius: "10px",
-        cursor: "pointer",
-        fontWeight: 600,
-      }}
-    >
-      ⭐ Leave Review
-    </button>
-  </>
-)}
+                    <button
+                      onClick={() =>
+                        navigate(`/customer/review/${booking.id}`)
+                      }
+                      style={{
+                        background: "#1565C0",
+                        color: "#fff",
+                        border: "none",
+                        padding: "12px 22px",
+                        borderRadius: "10px",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                      }}
+                    >
+                      ⭐ Leave Review
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           ))
         )}
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "15px",
+            marginTop: "35px",
+          }}
+        >
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            style={{
+              padding: "12px 22px",
+              border: "none",
+              borderRadius: "10px",
+              cursor: "pointer",
+              background: "#A31D1D",
+              color: "#fff",
+            }}
+          >
+            Previous
+          </button>
+
+          <span
+            style={{
+              alignSelf: "center",
+              fontWeight: "bold",
+              fontSize: "18px",
+            }}
+          >
+            Page {page}
+          </span>
+
+          <button
+            disabled={bookings.length < limit}
+            onClick={() => setPage(page + 1)}
+            style={{
+              padding: "12px 22px",
+              border: "none",
+              borderRadius: "10px",
+              cursor: "pointer",
+              background: "#A31D1D",
+              color: "#fff",
+            }}
+          >
+            Next
+          </button>
+        </div>
       </main>
     </>
   );

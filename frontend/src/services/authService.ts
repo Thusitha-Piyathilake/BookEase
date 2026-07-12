@@ -5,6 +5,14 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  phone?: string;
+  role: "CUSTOMER" | "PROVIDER";
+}
+
 export interface LoginResponse {
   message: string;
   access_token: string;
@@ -23,6 +31,17 @@ const authService = {
   ): Promise<LoginResponse> => {
     const response = await api.post<LoginResponse>(
       "/auth/login",
+      data
+    );
+
+    return response.data;
+  },
+
+  register: async (
+    data: RegisterRequest
+  ): Promise<any> => {
+    const response = await api.post(
+      "/auth/register",
       data
     );
 

@@ -30,6 +30,13 @@ export interface CreateBookingDto {
   notes?: string;
 }
 
+export interface BookingQuery {
+  search?: string;
+  status?: string;
+  page?: number;
+  limit?: number;
+}
+
 const bookingService = {
   // =========================
   // CUSTOMER
@@ -46,11 +53,20 @@ const bookingService = {
     return response.data;
   },
 
-  getMyBookings: async (): Promise<Booking[]> => {
-    const response = await api.get<Booking[]>(
-      "/bookings/customer"
-    );
+  getMyBookings: async (
+    query?: BookingQuery
+  ): Promise<Booking[]> => {
+    const params = new URLSearchParams();
 
+    if (query) {
+      if (query.page !== undefined) params.append("page", String(query.page));
+      if (query.limit !== undefined) params.append("limit", String(query.limit));
+      if (query.search) params.append("search", query.search);
+      if (query.status) params.append("status", query.status);
+    }
+
+    const url = `/bookings/customer${params.toString() ? `?${params.toString()}` : ""}`;
+    const response = await api.get<Booking[]>(url);
     return response.data;
   },
 
@@ -58,7 +74,6 @@ const bookingService = {
     const response = await api.get<Booking[]>(
       "/bookings/customer/upcoming"
     );
-
     return response.data;
   },
 
@@ -66,7 +81,6 @@ const bookingService = {
     const response = await api.get<Booking[]>(
       "/bookings/customer/history"
     );
-
     return response.data;
   },
 
@@ -76,19 +90,27 @@ const bookingService = {
     const response = await api.patch<Booking>(
       `/bookings/${id}/customer-cancel`
     );
-
     return response.data;
   },
 
   // =========================
-  // PROVIDER
+  // PROVIDER  (FIXED)
   // =========================
 
-  getProviderBookings: async (): Promise<Booking[]> => {
-    const response = await api.get<Booking[]>(
-      "/bookings/provider"
-    );
+  getProviderBookings: async (
+    query?: BookingQuery
+  ): Promise<Booking[]> => {
+    const params = new URLSearchParams();
 
+    if (query) {
+      if (query.page !== undefined) params.append("page", String(query.page));
+      if (query.limit !== undefined) params.append("limit", String(query.limit));
+      if (query.search) params.append("search", query.search);
+      if (query.status) params.append("status", query.status);
+    }
+
+    const url = `/bookings/provider${params.toString() ? `?${params.toString()}` : ""}`;
+    const response = await api.get<Booking[]>(url);
     return response.data;
   },
 
@@ -98,7 +120,6 @@ const bookingService = {
     const response = await api.patch<Booking>(
       `/bookings/${id}/confirm`
     );
-
     return response.data;
   },
 
@@ -108,7 +129,6 @@ const bookingService = {
     const response = await api.patch<Booking>(
       `/bookings/${id}/cancel`
     );
-
     return response.data;
   },
 
@@ -118,7 +138,6 @@ const bookingService = {
     const response = await api.patch<Booking>(
       `/bookings/${id}/complete`
     );
-
     return response.data;
   },
 };
