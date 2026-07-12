@@ -1,53 +1,90 @@
+/* ===========================
+   Customer Sidebar
+=========================== */
+
 .provider-sidebar {
+  width: 260px;
+  height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
-  width: 260px;
-  height: 100vh;
-  background: #6B0F0F;
+
+  background: #A31D1D;
   color: white;
+
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+
+  padding: 30px 20px;
+  box-sizing: border-box;
 }
 
-.logo {
-  font-size: 42px;
-  font-weight: bold;
-  padding: 35px 22px;
+.provider-logo {
+  margin-bottom: 50px;
 }
 
-.provider-sidebar nav {
+.provider-logo h2 {
+  font-size: 30px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.provider-logo span {
+  color: #ECDCBE;
+}
+
+.provider-menu {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 0 20px;
 }
 
-.nav-link {
+.provider-link {
   color: white;
   text-decoration: none;
-  padding: 16px 18px;
+
+  padding: 14px 18px;
+
   border-radius: 12px;
-  font-size: 20px;
-  transition: 0.25s;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  transition: 0.3s;
+
+  font-size: 18px;
+  font-weight: 500;
 }
 
-.nav-link:hover {
-  background: #D84040;
+.provider-link:hover {
+  background: rgba(255,255,255,.12);
 }
 
-.nav-link.active {
+.provider-link.active {
   background: #D84040;
 }
 
 .logout-btn {
-  margin: 20px;
-  padding: 16px;
+  margin-top: auto;
+
   border: none;
-  border-radius: 12px;
+
   background: #D84040;
   color: white;
-  font-size: 18px;
+
+  padding: 15px;
+
+  border-radius: 12px;
+
   cursor: pointer;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  transition: .3s;
+}
+
+.logout-btn:hover {
+  background: #c53333;
 }

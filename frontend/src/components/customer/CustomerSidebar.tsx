@@ -1,52 +1,77 @@
-import { NavLink } from "react-router-dom";
-
 import "./customer.css";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function CustomerSidebar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const menu = [
+    {
+      name: "Dashboard",
+      path: "/customer/dashboard",
+      icon: "🏠",
+    },
+    {
+      name: "Browse Services",
+      path: "/customer/services",
+      icon: "🔍",
+    },
+    {
+      name: "My Bookings",
+      path: "/customer/my-bookings",
+      icon: "📅",
+    },
+    {
+      name: "Reviews",
+      path: "/customer/reviews",
+      icon: "⭐",
+    },
+    {
+      name: "Profile",
+      path: "/customer/profile",
+      icon: "👤",
+    },
+  ];
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   return (
     <aside className="provider-sidebar">
-      <h1 className="logo">BookEase</h1>
 
-      <nav>
-        <NavLink
-          to="/customer/dashboard"
-          className="nav-link"
-        >
-          🏠 Dashboard
-        </NavLink>
+      <div className="provider-logo">
+        <h2>
+          Book<span>Ease</span>
+        </h2>
+      </div>
 
-        <NavLink
-          to="/customer/services"
-          className="nav-link"
-        >
-          🔍 Browse Services
-        </NavLink>
-
-        <NavLink
-          to="/customer/my-bookings"
-          className="nav-link"
-        >
-          📅 My Bookings
-        </NavLink>
-
-        <NavLink
-          to="/customer/reviews"
-          className="nav-link"
-        >
-          ⭐ Reviews
-        </NavLink>
-
-        <NavLink
-          to="/customer/profile"
-          className="nav-link"
-        >
-          👤 Profile
-        </NavLink>
+      <nav className="provider-menu">
+        {menu.map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={
+              location.pathname === item.path
+                ? "provider-link active"
+                : "provider-link"
+            }
+          >
+            <span>{item.icon}</span>
+            {item.name}
+          </Link>
+        ))}
       </nav>
 
-      <button className="logout-btn">
+      <button
+        className="logout-btn"
+        onClick={handleLogout}
+      >
         🚪 Logout
       </button>
+
     </aside>
   );
 }
