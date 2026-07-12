@@ -20,6 +20,11 @@ import Profile from "../pages/Customer/Profile";
 import NotFound from "../pages/NotFound/NotFound";
 import CustomerReviews from "../pages/Customer/Reviews";
 import ProviderProfile from "../pages/Provider/Profile";
+import AdminDashboard from "../pages/admin/Dashboard";
+import AdminUsers from "../pages/admin/Users";
+import AdminServices from "../pages/admin/Services";
+import AdminReviews from "../pages/admin/Reviews";
+
 
 export default function AppRoutes() {
   return (
@@ -65,6 +70,26 @@ export default function AppRoutes() {
           path="/customer/review/:bookingId"
           element={<LeaveReview />}
         />
+
+        <Route
+  path="/admin/dashboard"
+  element={<AdminDashboard />}
+/>
+
+<Route
+  path="/admin/users"
+  element={<AdminUsers />}
+/>
+
+<Route
+  path="/admin/services"
+  element={<AdminServices />}
+/>
+
+<Route
+  path="/admin/reviews"
+  element={<AdminReviews />}
+/>
 
         <Route
   path="/customer/reviews"

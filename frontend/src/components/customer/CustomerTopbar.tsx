@@ -27,7 +27,7 @@ export default function CustomerTopbar() {
             fontWeight: 700,
           }}
         >
-          Welcome 👋
+          Welcome 
         </h1>
 
         <p
@@ -48,33 +48,9 @@ export default function CustomerTopbar() {
           gap: "18px",
         }}
       >
-        <input
-          type="text"
-          placeholder="Search services..."
-          style={{
-            width: "300px",
-            padding: "13px 18px",
-            borderRadius: "12px",
-            border: "1px solid #E8D8A8",
-            background: "#FFF7DD",
-            fontSize: "15px",
-            outline: "none",
-          }}
-        />
+        
 
-        <button
-          style={{
-            width: "48px",
-            height: "48px",
-            borderRadius: "12px",
-            border: "none",
-            background: "#FFF7DD",
-            cursor: "pointer",
-            fontSize: "22px",
-          }}
-        >
-          🔔
-        </button>
+        
 
         <div
           style={{
