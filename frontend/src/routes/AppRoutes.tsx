@@ -9,6 +9,10 @@ import NotFound from "../pages/NotFound/NotFound";
 import MyServices from "../pages/Provider/MyServices";
 import AddService from "../pages/Provider/AddService";
 import EditService from "../pages/Provider/EditService";
+import Services from "../pages/Customer/Services";
+import ServiceDetails from "../pages/Customer/ServiceDetails";
+import MyBookings from "../pages/Customer/MyBookings";
+
 
 export default function AppRoutes() {
   return (
@@ -36,6 +40,21 @@ export default function AppRoutes() {
 <Route
   path="/provider/add-service"
   element={<AddService />}
+/>
+
+<Route
+  path="/customer/services"
+  element={<Services />}
+/>
+
+<Route
+  path="/customer/service/:id"
+  element={<ServiceDetails />}
+/>
+
+<Route
+  path="/customer/my-bookings"
+  element={<MyBookings />}
 />
 
 <Route
