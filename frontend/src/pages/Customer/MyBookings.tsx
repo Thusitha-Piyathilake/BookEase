@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import CustomerSidebar from "../../components/customer/CustomerSidebar";
 import CustomerTopbar from "../../components/customer/CustomerTopbar";
@@ -9,6 +10,7 @@ import type { Booking } from "../../services/bookingService";
 export default function MyBookings() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadBookings();
@@ -208,28 +210,50 @@ export default function MyBookings() {
                 </span>
 
                 {booking.status === "PENDING" && (
-                  <>
-                    <br />
-                    <br />
+  <>
+    <br />
+    <br />
 
-                    <button
-                      onClick={() =>
-                        cancelBooking(booking.id)
-                      }
-                      style={{
-                        background: "#D84040",
-                        color: "#fff",
-                        border: "none",
-                        padding: "12px 22px",
-                        borderRadius: "10px",
-                        cursor: "pointer",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Cancel Booking
-                    </button>
-                  </>
-                )}
+    <button
+      onClick={() => cancelBooking(booking.id)}
+      style={{
+        background: "#D84040",
+        color: "#fff",
+        border: "none",
+        padding: "12px 22px",
+        borderRadius: "10px",
+        cursor: "pointer",
+        fontWeight: 600,
+      }}
+    >
+      Cancel Booking
+    </button>
+  </>
+)}
+
+{booking.status === "COMPLETED" && (
+  <>
+    <br />
+    <br />
+
+    <button
+      onClick={() =>
+        navigate(`/customer/review/${booking.id}`)
+      }
+      style={{
+        background: "#1565C0",
+        color: "#fff",
+        border: "none",
+        padding: "12px 22px",
+        borderRadius: "10px",
+        cursor: "pointer",
+        fontWeight: 600,
+      }}
+    >
+      ⭐ Leave Review
+    </button>
+  </>
+)}
               </div>
             </div>
           ))
