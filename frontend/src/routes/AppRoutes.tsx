@@ -16,7 +16,7 @@ import AddService from "../pages/Provider/AddService";
 import EditService from "../pages/Provider/EditService";
 import Bookings from "../pages/Provider/Bookings";
 import Reviews from "../pages/Provider/Reviews";
-
+import Profile from "../pages/Customer/Profile";
 import NotFound from "../pages/NotFound/NotFound";
 
 export default function AppRoutes() {
@@ -48,6 +48,11 @@ export default function AppRoutes() {
           path="/customer/my-bookings"
           element={<MyBookings />}
         />
+
+        <Route
+  path="/customer/profile"
+  element={<Profile />}
+/>
 
         <Route
           path="/customer/review/:bookingId"
