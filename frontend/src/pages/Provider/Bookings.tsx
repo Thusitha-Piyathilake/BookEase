@@ -67,17 +67,14 @@ export default function Bookings() {
 
   const statusColor = (status: string) => {
     switch (status) {
-      case "CONFIRMED":
-        return "#2E7D32";
-
       case "COMPLETED":
-        return "#1565C0";
+        return "#2E7D32";
 
       case "CANCELLED":
         return "#C62828";
 
       default:
-        return "#F57C00";
+        return "#1565C0";
     }
   };
 
@@ -208,19 +205,22 @@ export default function Bookings() {
                   textAlign: "right",
                 }}
               >
-                <span
-                  style={{
-                    background: statusColor(
-                      booking.status
-                    ),
-                    color: "#fff",
-                    padding: "8px 18px",
-                    borderRadius: "30px",
-                    fontWeight: 600,
-                  }}
-                >
-                  {booking.status}
-                </span>
+                {(booking.status === "COMPLETED" ||
+                  booking.status === "CANCELLED") && (
+                  <span
+                    style={{
+                      background: statusColor(
+                        booking.status
+                      ),
+                      color: "#fff",
+                      padding: "8px 18px",
+                      borderRadius: "30px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {booking.status}
+                  </span>
+                )}
 
                 <div
                   style={{
@@ -238,7 +238,7 @@ export default function Bookings() {
                         }
                         style={greenButton}
                       >
-                        Confirm
+                        ✅ Confirm
                       </button>
 
                       <button
@@ -247,7 +247,7 @@ export default function Bookings() {
                         }
                         style={redButton}
                       >
-                        Cancel
+                        ❌ Cancel
                       </button>
                     </>
                   )}
@@ -260,7 +260,7 @@ export default function Bookings() {
                         }
                         style={blueButton}
                       >
-                        Complete
+                        ✔ Complete
                       </button>
 
                       <button
@@ -269,7 +269,7 @@ export default function Bookings() {
                         }
                         style={redButton}
                       >
-                        Cancel
+                        ❌ Cancel
                       </button>
                     </>
                   )}
