@@ -36,12 +36,12 @@ export default function CustomerSidebar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    navigate("/login");
+
+    navigate("/");
   };
 
   return (
     <aside className="provider-sidebar">
-
       <div className="provider-logo">
         <h2>
           Book<span>Ease</span>
@@ -71,7 +71,6 @@ export default function CustomerSidebar() {
       >
         🚪 Logout
       </button>
-
     </aside>
   );
 }

@@ -1,8 +1,56 @@
+import { useEffect, useState } from "react";
+
 import CustomerSidebar from "../../components/customer/CustomerSidebar";
 import CustomerTopbar from "../../components/customer/CustomerTopbar";
 import StatsCard from "../../components/customer/StatsCard";
 
+import bookingService from "../../services/bookingService";
+import type { Booking } from "../../services/bookingService";
+
+import serviceService from "../../services/serviceService";
+import type { Service } from "../../services/serviceService";
+
 export default function CustomerDashboard() {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadDashboard();
+  }, []);
+
+  const loadDashboard = async () => {
+    try {
+      const [bookingData, serviceData] =
+        await Promise.all([
+          bookingService.getMyBookings(),
+          serviceService.getAllServices(),
+        ]);
+
+      setBookings(bookingData);
+      setServices(serviceData);
+    } catch (error) {
+      console.error("Failed to load dashboard", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const totalBookings = bookings.length;
+
+  const upcomingBookings = bookings.filter(
+    (booking) =>
+      booking.status === "PENDING" ||
+      booking.status === "CONFIRMED"
+  ).length;
+
+  const completedBookings = bookings.filter(
+    (booking) =>
+      booking.status === "COMPLETED"
+  ).length;
+
+  const totalServices = services.length;
+
   return (
     <>
       <CustomerSidebar />
@@ -18,139 +66,49 @@ export default function CustomerDashboard() {
           minHeight: "calc(100vh - 90px)",
         }}
       >
-        {/* Welcome Banner */}
-
-        <div
-          style={{
-            background:
-              "linear-gradient(135deg,#A31D1D 0%, #D84040 100%)",
-            borderRadius: "20px",
-            padding: "35px",
-            color: "#fff",
-            marginBottom: "35px",
-            boxShadow: "0 12px 30px rgba(0,0,0,.12)",
-          }}
-        >
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "38px",
-            }}
-          >
-            Welcome Back 👋
-          </h1>
-
-          <p
-            style={{
-              marginTop: "10px",
-              fontSize: "17px",
-              opacity: 0.9,
-            }}
-          >
-            Discover trusted professionals and manage all your bookings in one
-            place.
-          </p>
-        </div>
+        
 
         {/* Statistics */}
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))",
-            gap: "25px",
-            marginBottom: "40px",
-          }}
-        >
-          <StatsCard
-            title="Total Bookings"
-            value={12}
-            icon="📅"
-          />
-
-          <StatsCard
-            title="Upcoming"
-            value={4}
-            icon="⏰"
-          />
-
-          <StatsCard
-            title="Completed"
-            value={8}
-            icon="✅"
-          />
-
-          <StatsCard
-            title="Available Services"
-            value={26}
-            icon="🛠️"
-          />
-        </div>
-
-        {/* Quick Actions */}
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
-            gap: "25px",
-            marginBottom: "40px",
-          }}
-        >
+        {loading ? (
+          <h2>Loading dashboard...</h2>
+        ) : (
           <div
-            style={cardStyle}
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                "repeat(auto-fit,minmax(250px,1fr))",
+              gap: "25px",
+              marginBottom: "40px",
+            }}
           >
-            <h2>🔍 Browse Services</h2>
+            <StatsCard
+              title="Total Bookings"
+              value={totalBookings}
+              icon="📅"
+            />
 
-            <p>
-              Find trusted professionals near you and book services easily.
-            </p>
+            <StatsCard
+              title="Upcoming"
+              value={upcomingBookings}
+              icon="⏰"
+            />
 
-            <button
-              style={buttonStyle}
-              onClick={() => {
-                window.location.href = "/customer/services";
-              }}
-            >
-              Browse Now
-            </button>
+            <StatsCard
+              title="Completed"
+              value={completedBookings}
+              icon="✅"
+            />
+
+            <StatsCard
+              title="Available Services"
+              value={totalServices}
+              icon="🛠️"
+            />
           </div>
+        )}
 
-          <div
-            style={cardStyle}
-          >
-            <h2>📅 My Bookings</h2>
-
-            <p>
-              Track your upcoming and completed bookings.
-            </p>
-
-            <button
-              style={buttonStyle}
-              onClick={() => {
-                window.location.href = "/customer/my-bookings";
-              }}
-            >
-              View Bookings
-            </button>
-          </div>
-
-          <div
-            style={cardStyle}
-          >
-            <h2>⭐ Reviews</h2>
-
-            <p>
-              View and manage the reviews you've given to providers.
-            </p>
-
-            <button
-              style={buttonStyle}
-            >
-              View Reviews
-            </button>
-          </div>
-        </div>
+        
 
         {/* Featured Section */}
 
@@ -177,8 +135,8 @@ export default function CustomerDashboard() {
             }}
           >
             Browse our most popular categories including House Cleaning,
-            Plumbing, Electrical Repairs, Painting, Gardening, Appliance Repair,
-            and many more.
+            Plumbing, Electrical Repairs, Painting, Gardening,
+            Appliance Repair, and many more.
           </p>
 
           <div

@@ -18,6 +18,8 @@ import Bookings from "../pages/Provider/Bookings";
 import Reviews from "../pages/Provider/Reviews";
 import Profile from "../pages/Customer/Profile";
 import NotFound from "../pages/NotFound/NotFound";
+import CustomerReviews from "../pages/Customer/Reviews";
+import ProviderProfile from "../pages/Provider/Profile";
 
 export default function AppRoutes() {
   return (
@@ -45,6 +47,11 @@ export default function AppRoutes() {
         />
 
         <Route
+  path="/provider/profile"
+  element={<ProviderProfile />}
+/>
+
+        <Route
           path="/customer/my-bookings"
           element={<MyBookings />}
         />
@@ -58,6 +65,11 @@ export default function AppRoutes() {
           path="/customer/review/:bookingId"
           element={<LeaveReview />}
         />
+
+        <Route
+  path="/customer/reviews"
+  element={<CustomerReviews />}
+/>
 
         <Route
           path="/provider/dashboard"
