@@ -12,7 +12,7 @@ import EditService from "../pages/Provider/EditService";
 import Services from "../pages/Customer/Services";
 import ServiceDetails from "../pages/Customer/ServiceDetails";
 import MyBookings from "../pages/Customer/MyBookings";
-
+import Bookings from "../pages/Provider/Bookings";
 
 export default function AppRoutes() {
   return (
@@ -35,6 +35,11 @@ export default function AppRoutes() {
 <Route
   path="/provider/edit-service/:id"
   element={<EditService />}
+/>
+
+<Route
+  path="/provider/bookings"
+  element={<Bookings />}
 />
 
 <Route
