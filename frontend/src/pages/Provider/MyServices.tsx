@@ -14,6 +14,10 @@ export default function MyServices() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Search & filter states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("All");
+
   const loadServices = async () => {
     try {
       const data = await serviceService.getMyServices();
@@ -50,6 +54,22 @@ export default function MyServices() {
       alert("Failed to delete service.");
     }
   };
+
+  // Extract unique categories for the filter dropdown
+  const categories = [
+    "All",
+    ...new Set(services.map((s) => s.category).filter(Boolean)),
+  ];
+
+  // Apply search and filter
+  const filteredServices = services.filter((service) => {
+    const matchesSearch = service.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      filterCategory === "All" || service.category === filterCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <>
@@ -109,9 +129,54 @@ export default function MyServices() {
           </button>
         </div>
 
+        {/* Search and Filter Bar */}
+        <div
+          style={{
+            display: "flex",
+            gap: "16px",
+            marginBottom: "24px",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Search services by title..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              flex: 1,
+              minWidth: "200px",
+              padding: "10px 16px",
+              borderRadius: "8px",
+              border: "1px solid #ddd",
+              fontSize: "14px",
+              background: "#fff",
+            }}
+          />
+          <select
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+            style={{
+              padding: "10px 16px",
+              borderRadius: "8px",
+              border: "1px solid #ddd",
+              fontSize: "14px",
+              background: "#fff",
+              minWidth: "150px",
+            }}
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {loading ? (
           <h3>Loading services...</h3>
-        ) : services.length === 0 ? (
+        ) : filteredServices.length === 0 ? (
           <div
             style={{
               background: "#fff",
@@ -121,19 +186,24 @@ export default function MyServices() {
               boxShadow: "0 10px 30px rgba(0,0,0,.08)",
             }}
           >
-            <h2>No services found</h2>
-
+            <h2>
+              {services.length === 0
+                ? "No services found"
+                : "No matching services"}
+            </h2>
             <p
               style={{
                 color: "#666",
                 marginTop: "10px",
               }}
             >
-              Click "Add Service" to create your first service.
+              {services.length === 0
+                ? 'Click "Add Service" to create your first service.'
+                : "Try adjusting your search or filter criteria."}
             </p>
           </div>
         ) : (
-          services.map((service) => (
+          filteredServices.map((service) => (
             <ServiceCard
               key={service.id}
               image={
