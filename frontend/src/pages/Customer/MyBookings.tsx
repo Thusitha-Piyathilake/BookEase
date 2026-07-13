@@ -14,27 +14,35 @@ export default function MyBookings() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
 
-  const [page, setPage] = useState(1);
-  const limit = 5;
+  // Remove page state – use a fixed large limit
+  const limit = 100;
 
   const navigate = useNavigate();
 
   useEffect(() => {
     loadBookings();
-  }, [page, search, status]);
+  }, [search, status]); // page removed from dependencies
 
   const loadBookings = async () => {
     try {
       setLoading(true);
 
+      // Fetch all bookings (page 1, large limit)
       const data = await bookingService.getMyBookings({
-        page,
+        page: 1,
         limit,
         search,
         status,
       });
 
-      setBookings(data);
+      // Sort: newest first (by bookingDate + bookingTime descending)
+      const sorted = [...data].sort((a, b) => {
+        const dateA = new Date(`${a.bookingDate}T${a.bookingTime}`);
+        const dateB = new Date(`${b.bookingDate}T${b.bookingTime}`);
+        return dateB.getTime() - dateA.getTime();
+      });
+
+      setBookings(sorted);
     } catch (error) {
       console.error(error);
       alert("Failed to load bookings.");
@@ -114,7 +122,6 @@ export default function MyBookings() {
             placeholder="Search service..."
             value={search}
             onChange={(e) => {
-              setPage(1);
               setSearch(e.target.value);
             }}
             style={{
@@ -128,7 +135,6 @@ export default function MyBookings() {
           <select
             value={status}
             onChange={(e) => {
-              setPage(1);
               setStatus(e.target.value);
             }}
             style={{
@@ -309,54 +315,7 @@ export default function MyBookings() {
           ))
         )}
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "15px",
-            marginTop: "35px",
-          }}
-        >
-          <button
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-            style={{
-              padding: "12px 22px",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
-              background: "#A31D1D",
-              color: "#fff",
-            }}
-          >
-            Previous
-          </button>
-
-          <span
-            style={{
-              alignSelf: "center",
-              fontWeight: "bold",
-              fontSize: "18px",
-            }}
-          >
-            Page {page}
-          </span>
-
-          <button
-            disabled={bookings.length < limit}
-            onClick={() => setPage(page + 1)}
-            style={{
-              padding: "12px 22px",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
-              background: "#A31D1D",
-              color: "#fff",
-            }}
-          >
-            Next
-          </button>
-        </div>
+        {/* Pagination removed */}
       </main>
     </>
   );
