@@ -47,29 +47,36 @@ export default function Bookings() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
 
-  const [page, setPage] = useState(1);
-  const limit = 5;
+  // Remove page state, use a fixed large limit
+  const limit = 1000;
 
   useEffect(() => {
     loadBookings();
-  }, [page, search, status]);
+  }, [search, status]); // page removed from dependencies
 
   const loadBookings = async () => {
     try {
       setLoading(true);
 
+      // Always fetch page 1 with a large limit to get all bookings
       const data = await bookingService.getProviderBookings({
-        page,
+        page: 1,
         limit,
         search,
         status,
       });
 
-      setBookings(data);
+      // Sort bookings: newest first (by bookingDate and bookingTime descending)
+      const sorted = [...data].sort((a, b) => {
+        const dateA = new Date(`${a.bookingDate}T${a.bookingTime}`);
+        const dateB = new Date(`${b.bookingDate}T${b.bookingTime}`);
+        return dateB.getTime() - dateA.getTime();
+      });
+
+      setBookings(sorted);
     } catch (error: any) {
       console.error(error);
 
-      // Better error message
       if (error?.response?.status === 403) {
         alert(
           "You are not authorized to view provider bookings.\n" +
@@ -179,7 +186,6 @@ export default function Bookings() {
             placeholder="Search customer or service..."
             value={search}
             onChange={(e) => {
-              setPage(1);
               setSearch(e.target.value);
             }}
             style={{
@@ -193,7 +199,6 @@ export default function Bookings() {
           <select
             value={status}
             onChange={(e) => {
-              setPage(1);
               setStatus(e.target.value);
             }}
             style={{
@@ -368,55 +373,7 @@ export default function Bookings() {
               </div>
             ))}
 
-            {/* Pagination */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "15px",
-                marginTop: "35px",
-              }}
-            >
-              <button
-                disabled={page === 1}
-                onClick={() => setPage(page - 1)}
-                style={{
-                  padding: "12px 22px",
-                  border: "none",
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                  background: "#A31D1D",
-                  color: "#fff",
-                }}
-              >
-                Previous
-              </button>
-
-              <span
-                style={{
-                  alignSelf: "center",
-                  fontWeight: "bold",
-                  fontSize: "18px",
-                }}
-              >
-                Page {page}
-              </span>
-
-              <button
-                disabled={bookings.length < limit}
-                onClick={() => setPage(page + 1)}
-                style={{
-                  padding: "12px 22px",
-                  border: "none",
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                  background: "#A31D1D",
-                  color: "#fff",
-                }}
-              >
-                Next
-              </button>
-            </div>
+            {/* Pagination removed – all bookings displayed on one page */}
           </>
         )}
       </main>
