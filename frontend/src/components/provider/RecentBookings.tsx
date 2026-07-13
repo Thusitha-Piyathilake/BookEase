@@ -29,6 +29,7 @@ export default function RecentBookings({
           <thead>
             <tr>
               <th>Customer</th>
+              <th>Phone</th>   {/* added phone column */}
               <th>Service</th>
               <th>Date</th>
               <th>Status</th>
@@ -39,14 +40,13 @@ export default function RecentBookings({
             {bookings.map((booking) => (
               <tr key={booking.id}>
                 <td>
-                  {booking.customer.firstName}{" "}
-                  {booking.customer.lastName}
+                  {booking.customer.name}   {/* replaced firstName + lastName */}
                 </td>
-
+                <td>
+                  {booking.customer.phone || "Not provided"}
+                </td>
                 <td>{booking.service.title}</td>
-
                 <td>{booking.bookingDate}</td>
-
                 <td>
                   <span
                     className={`status ${booking.status.toLowerCase()}`}
