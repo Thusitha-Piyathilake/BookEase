@@ -24,8 +24,9 @@ export default function HomeServices() {
     loadServices();
   }, []);
 
-  const handleBookNow = (serviceId: string) => {
-    navigate(`/customer/service/${serviceId}`);
+  // 🔁 Book Now → redirect to login page
+  const handleBookNow = () => {
+    navigate("/login");
   };
 
   return (
@@ -160,7 +161,7 @@ export default function HomeServices() {
                         Rs. {Number(service.price).toFixed(2)}
                       </span>
                       <button
-                        onClick={() => handleBookNow(service.id)}
+                        onClick={handleBookNow}   // ← now goes to login
                         style={{
                           background: "#D84040",
                           color: "#fff",
