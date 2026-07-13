@@ -46,25 +46,9 @@ export default function BookingCalendar({
           onClickDay={onDateClick}
           tileClassName={({ date, view }) => {
             if (view !== "month") return "";
-
             const formatted = date.toLocaleDateString("en-CA");
-
-            if (bookedDates.includes(formatted)) {
-              return "booked-date";
-            }
-
+            if (bookedDates.includes(formatted)) return "booked-date";
             return "";
-          }}
-          // Force full week view with proper sizing
-          formatShortWeekday={(locale, date) =>
-            ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"][date.getDay()]
-          }
-          // Ensure proper tile sizing
-          tileContent={({ date, view }) => {
-            if (view === "month") {
-              return null;
-            }
-            return null;
           }}
         />
       </div>
