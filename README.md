@@ -1,6 +1,6 @@
 # BookEase - Home Services Booking Platform
 
-BookEase is a full-stack web application that connects customers with service providers. Customers can browse services, book appointments, leave reviews, and manage bookings, while providers can manage their services and appointments. The system also includes an Admin Dashboard for platform management.
+BookEase is a full-stack web application that connects customers with trusted service providers. Customers can browse services, make bookings, leave reviews, and manage appointments, while providers can manage their services and bookings. The platform also includes an Admin Dashboard for managing users, services, and reviews.
 
 ---
 
@@ -32,7 +32,7 @@ BookEase is built using a modern full-stack architecture.
 ## Customer
 
 - Register & Login
-- View available services
+- Browse available services
 - Search services
 - Book services
 - View upcoming bookings
@@ -40,6 +40,7 @@ BookEase is built using a modern full-stack architecture.
 - Cancel bookings
 - Leave reviews
 - Manage profile
+- Booking calendar
 
 ---
 
@@ -50,7 +51,7 @@ BookEase is built using a modern full-stack architecture.
 - Update services
 - Delete services
 - Manage bookings
-- Accept bookings
+- Confirm bookings
 - Complete bookings
 - Cancel bookings
 - View customer reviews
@@ -62,18 +63,15 @@ BookEase is built using a modern full-stack architecture.
 
 - Dashboard
 - View platform statistics
-- View all users
-- Delete users
-- View all services
-- Delete services
-- View all reviews
-- Delete reviews
+- Manage users
+- Manage services
+- Manage reviews
 
 ---
 
 # Project Structure
 
-```
+```text
 backend/
 │
 ├── src
@@ -83,10 +81,10 @@ backend/
 │   ├── bookings
 │   ├── reviews
 │   ├── admin
+│   ├── migrations
 │   └── common
 │
 └── package.json
-
 
 frontend/
 │
@@ -104,7 +102,7 @@ frontend/
 
 # Installation Steps
 
-## 1 Clone Repository
+## 1. Clone Repository
 
 ```bash
 git clone https://github.com/yourusername/bookease.git
@@ -114,7 +112,7 @@ cd bookease
 
 ---
 
-## 2 Backend Installation
+## 2. Backend Setup
 
 ```bash
 cd backend
@@ -124,7 +122,7 @@ npm install
 
 ---
 
-## 3 Frontend Installation
+## 3. Frontend Setup
 
 ```bash
 cd frontend
@@ -136,7 +134,7 @@ npm install
 
 # Environment Variables
 
-Create a `.env` file inside the backend folder.
+Create a `.env` file inside the **backend** folder.
 
 ```env
 DB_HOST=localhost
@@ -155,21 +153,21 @@ PORT=5000
 
 # Database Setup
 
-Create a PostgreSQL database named
+1. Create a PostgreSQL database named:
 
-```
-bookease
-```
-
-Update the `.env` file with your PostgreSQL credentials.
-
-TypeORM will automatically create all tables because
-
-```ts
-synchronize: true
+```text
+bookease_db
 ```
 
-is enabled.
+2. Update your `.env` file with your PostgreSQL credentials.
+
+3. Run the database migrations:
+
+```bash
+npm run migration:run
+```
+
+This will create all required database tables.
 
 ---
 
@@ -187,9 +185,9 @@ npm run migration:run
 npm run start:dev
 ```
 
-Runs on
+Backend runs at:
 
-```
+```text
 http://localhost:5000
 ```
 
@@ -200,12 +198,14 @@ http://localhost:5000
 ```bash
 cd frontend
 
+npm install
+
 npm run dev
 ```
 
-Runs on
+Frontend runs at:
 
-```
+```text
 http://localhost:5173
 ```
 
@@ -213,37 +213,35 @@ http://localhost:5173
 
 # Running Migrations
 
-This project currently uses
-
-```ts
-synchronize: true
-```
-
-during development.
-
-No migrations are required.
-
-For production, migrations should be generated using TypeORM.
-
-Example:
+Generate a new migration after changing entities:
 
 ```bash
-npm run typeorm migration:generate
-npm run typeorm migration:run
+npm run migration:generate
+```
+
+Run pending migrations:
+
+```bash
+npm run migration:run
+```
+
+Revert the latest migration:
+
+```bash
+npm run migration:revert
 ```
 
 ---
 
 # API Documentation
 
-Swagger documentation is available at
+Swagger documentation is available at:
 
-```
-Swagger UI:
+```text
 https://bookease-production-c4b5.up.railway.app/api
 ```
 
-Swagger includes documentation for
+Swagger includes documentation for:
 
 - Authentication
 - Users
@@ -257,13 +255,13 @@ Swagger includes documentation for
 
 # Authentication
 
-JWT Authentication is implemented using
+JWT Authentication is implemented using:
 
 - Passport JWT
 - NestJS Guards
 - Role Guards
 
-Supported roles
+Supported Roles:
 
 - CUSTOMER
 - PROVIDER
@@ -273,16 +271,16 @@ Supported roles
 
 # Database Design
 
-The project contains the following main entities.
+Main Entities:
 
 - User
 - Service
 - Booking
 - Review
 
-Relationships
+Relationships:
 
-```
+```text
 User
 │
 ├── Services
@@ -302,13 +300,13 @@ Booking
 
 # Validation & Error Handling
 
-Validation is implemented using
+Validation is implemented using:
 
 - ValidationPipe
 - class-validator
 - DTOs
 
-Common HTTP responses
+Common HTTP Responses:
 
 - 200 OK
 - 201 Created
@@ -323,7 +321,7 @@ Common HTTP responses
 
 - A customer can create multiple bookings.
 - Providers manage only their own services.
-- Reviews can only be created after a booking.
+- Reviews can only be created after a completed booking.
 - Admin has full access to manage users, services, and reviews.
 - JWT authentication is required for protected routes.
 
@@ -331,12 +329,9 @@ Common HTTP responses
 
 # Future Improvements
 
-Possible future enhancements include
-
 - Refresh Token Authentication
 - Email Verification
 - Password Reset
-- Image Uploads
 - Payment Gateway Integration
 - Real-time Notifications
 - Chat between Customer and Provider
@@ -344,46 +339,45 @@ Possible future enhancements include
 - Docker Deployment
 - Unit & Integration Testing
 
-
 ---
 
 # API Modules
 
-Authentication
+## Authentication
 
 - Register
 - Login
 - Profile
 
-Users
+## Users
 
 - Customer
 - Provider
 - Admin
 
-Services
+## Services
 
 - Create Service
 - Update Service
 - Delete Service
 - Get Services
 
-Bookings
+## Bookings
 
 - Create Booking
-- Update Booking
 - Cancel Booking
 - Confirm Booking
 - Complete Booking
+- Booking History
 
-Reviews
+## Reviews
 
 - Create Review
 - Update Review
 - Delete Review
 - Average Rating
 
-Admin
+## Admin
 
 - Dashboard
 - Users Management
@@ -394,7 +388,7 @@ Admin
 
 # Technologies Used
 
-Backend
+## Backend
 
 - NestJS
 - TypeScript
@@ -404,28 +398,33 @@ Backend
 - JWT
 - Swagger
 
-Frontend
+## Frontend
 
 - React
 - React Router
 - Axios
 - CSS
 
-Development Tools
+## Development Tools
 
 - VS Code
 - Postman
+- swagger
 - Git
 - GitHub
+
+
+## Deployed links
+```text
+https://bookease-puce.vercel.app/
+```
 
 ---
 
 # Author
 
-Thusitha Piyathilake
+**Thusitha Piyathilake**
 
-BSc (Hons) Information Technology
-Specialization in Software Engineering
+BSc (Hons) Information Technology  
+Specialization in Software Engineering  
 SLIIT
-
----
