@@ -92,6 +92,11 @@ export default function ServiceDetails() {
     );
   }
 
+  // Compute tomorrow's date in YYYY-MM-DD format for the min attribute
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split('T')[0];
+
   return (
     <div
       style={{
@@ -212,6 +217,7 @@ export default function ServiceDetails() {
               onChange={(e) =>
                 setBookingDate(e.target.value)
               }
+              min={minDate}  // ← Only future dates allowed (from tomorrow onward)
               style={{
                 padding: "15px",
                 borderRadius: "10px",
