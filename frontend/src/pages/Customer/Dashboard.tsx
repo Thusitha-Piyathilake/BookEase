@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import CustomerSidebar from "../../components/customer/CustomerSidebar";
 import CustomerTopbar from "../../components/customer/CustomerTopbar";
 import StatsCard from "../../components/customer/StatsCard";
-import BookingCalendar from "../../components/customer/BookingCalendar"; // ← added
+import BookingCalendar from "../../components/customer/BookingCalendar";
 
 import bookingService from "../../services/bookingService";
 import type { Booking } from "../../services/bookingService";
@@ -16,7 +16,6 @@ export default function CustomerDashboard() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // New states for modal
   const [selectedBookings, setSelectedBookings] = useState<Booking[]>([]);
   const [showBookingModal, setShowBookingModal] = useState(false);
 
@@ -52,14 +51,13 @@ export default function CustomerDashboard() {
 
   const totalServices = services.length;
 
-  // Memoized list of booked dates
   const bookedDates = useMemo(() => {
     return bookings.map((booking) => booking.bookingDate);
   }, [bookings]);
 
-  // Handle date click: show bookings for that day
+  // FIXED: uses toLocaleDateString("en-CA") to match tileClassName
   const handleDateClick = (date: Date) => {
-    const formatted = date.toISOString().split("T")[0];
+    const formatted = date.toLocaleDateString("en-CA");
 
     const bookingsForDay = bookings.filter(
       (booking) => booking.bookingDate === formatted
@@ -74,7 +72,6 @@ export default function CustomerDashboard() {
   return (
     <>
       <CustomerSidebar />
-
       <CustomerTopbar />
 
       <main
@@ -86,7 +83,6 @@ export default function CustomerDashboard() {
           minHeight: "calc(100vh - 90px)",
         }}
       >
-        {/* Statistics */}
         {loading ? (
           <h2>Loading dashboard...</h2>
         ) : (
@@ -109,10 +105,8 @@ export default function CustomerDashboard() {
           </div>
         )}
 
-        {/* Booking Calendar (added) */}
         <BookingCalendar bookedDates={bookedDates} onDateClick={handleDateClick} />
 
-        {/* Featured Section */}
         <div
           style={{
             background: "#fff",
@@ -122,20 +116,11 @@ export default function CustomerDashboard() {
             marginTop: "30px",
           }}
         >
-          <h2
-            style={{
-              color: "#A31D1D",
-              marginBottom: "15px",
-            }}
-          >
+          <h2 style={{ color: "#A31D1D", marginBottom: "15px" }}>
             Featured Services
           </h2>
 
-          <p
-            style={{
-              color: "#666",
-            }}
-          >
+          <p style={{ color: "#666" }}>
             Browse our most popular categories including House Cleaning,
             Plumbing, Electrical Repairs, Painting, Gardening, Appliance Repair,
             and many more.
@@ -158,7 +143,6 @@ export default function CustomerDashboard() {
           </div>
         </div>
 
-        {/* Booking Details Modal */}
         {showBookingModal && (
           <div
             style={{
@@ -189,12 +173,7 @@ export default function CustomerDashboard() {
                   marginBottom: "25px",
                 }}
               >
-                <h2
-                  style={{
-                    color: "#A31D1D",
-                    margin: 0,
-                  }}
-                >
+                <h2 style={{ color: "#A31D1D", margin: 0 }}>
                   📅 Booking Details
                 </h2>
 
@@ -226,12 +205,7 @@ export default function CustomerDashboard() {
                     background: "#FAFAFA",
                   }}
                 >
-                  <h3
-                    style={{
-                      color: "#A31D1D",
-                      marginBottom: "12px",
-                    }}
-                  >
+                  <h3 style={{ color: "#A31D1D", marginBottom: "12px" }}>
                     {booking.service.title}
                   </h3>
 
