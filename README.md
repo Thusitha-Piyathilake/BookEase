@@ -235,7 +235,8 @@ npm run typeorm migration:run
 Swagger documentation is available at
 
 ```
-http://localhost:5000/api
+Swagger UI:
+https://bookease-production-c4b5.up.railway.app/api
 ```
 
 Swagger includes documentation for

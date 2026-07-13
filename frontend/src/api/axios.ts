@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: 'https://bookease-production-c4b5.up.railway.app',
   headers: {
     "Content-Type": "application/json",
   },
