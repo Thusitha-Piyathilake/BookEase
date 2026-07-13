@@ -11,7 +11,6 @@
   margin-right: auto;
 }
 
-/* Calendar tiles – let react-calendar handle layout */
 .react-calendar {
   width: 100% !important;
   border: none !important;
@@ -60,10 +59,10 @@
   font-weight: 600;
 }
 
-/* Tiles – size and appearance */
+/* ----- All day tiles: black text ----- */
 .react-calendar__tile {
   padding: 12px 6px !important;
-  height: 70px !important;          /* fixed height to keep them square-ish */
+  height: 70px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -71,6 +70,7 @@
   border-radius: 10px !important;
   transition: background 0.2s ease;
   background: transparent !important;
+  color: #000 !important;          /* black for all tiles */
 }
 
 .react-calendar__tile:hover {
@@ -84,7 +84,7 @@
   border: 2px solid #A31D1D !important;
   border-radius: 50% !important;
   font-weight: 700 !important;
-  color: #A31D1D !important;
+  color: #A31D1D !important;      /* keep today's colour */
 }
 
 /* Selected / active */
@@ -97,7 +97,7 @@
 /* Booked dates */
 .booked-date {
   background: #D84040 !important;
-  color: #fff !important;
+  color: #fff !important;          /* white text on red */
   border-radius: 50% !important;
   font-weight: 700 !important;
   box-shadow: 0 4px 10px rgba(216, 64, 64, 0.3) !important;
@@ -107,14 +107,14 @@
   transform: scale(1.08);
 }
 
-/* Neighbouring month days (greyed out) */
+/* Neighbouring month days (greyed out) – you can also make them black if you prefer */
 .react-calendar__month-view__days__day--neighboringMonth {
   color: #ccc !important;
 }
 
-/* Weekend day text */
+/* Weekend days – override to black (default is red) */
 .react-calendar__month-view__days__day--weekend {
-  color: #A31D1D !important;
+  color: #000 !important;          /* now black */
 }
 
 /* Responsive */
