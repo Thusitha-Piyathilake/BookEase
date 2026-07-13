@@ -18,14 +18,10 @@ export default function Reviews() {
 
   const loadReviews = async () => {
     try {
-      const data =
-        await reviewService.getProviderReviews();
-
+      const data = await reviewService.getProviderReviews();
       setReviews(data);
 
-      const stats =
-        await reviewService.getMyAverageRating();
-
+      const stats = await reviewService.getMyAverageRating();
       setAverageRating(stats.averageRating);
       setTotalReviews(stats.totalReviews);
     } catch (error) {
@@ -44,8 +40,8 @@ export default function Reviews() {
       <main
         style={{
           marginLeft: "260px",
-          marginTop: "90px",
-          padding: "35px",
+          marginTop: "30px", // reduced from 90px
+          padding: "20px 35px 35px", // trimmed top padding
           background: "#F8F2DE",
           minHeight: "calc(100vh - 90px)",
         }}
@@ -74,8 +70,7 @@ export default function Reviews() {
             padding: 25,
             borderRadius: 20,
             marginBottom: 30,
-            boxShadow:
-              "0 10px 25px rgba(0,0,0,.08)",
+            boxShadow: "0 10px 25px rgba(0,0,0,.08)",
           }}
         >
           <h2
@@ -86,7 +81,6 @@ export default function Reviews() {
           >
             ⭐ {averageRating.toFixed(1)}
           </h2>
-
           <p
             style={{
               color: "#666",
@@ -108,7 +102,6 @@ export default function Reviews() {
             }}
           >
             <h2>No reviews yet.</h2>
-
             <p style={{ color: "#666" }}>
               Customer reviews will appear here.
             </p>
@@ -124,8 +117,7 @@ export default function Reviews() {
                 marginBottom: 25,
                 display: "flex",
                 gap: 20,
-                boxShadow:
-                  "0 10px 25px rgba(0,0,0,.08)",
+                boxShadow: "0 10px 25px rgba(0,0,0,.08)",
               }}
             >
               <img
@@ -141,7 +133,6 @@ export default function Reviews() {
                   borderRadius: 15,
                 }}
               />
-
               <div
                 style={{
                   flex: 1,
@@ -155,7 +146,6 @@ export default function Reviews() {
                 >
                   {review.service.title}
                 </h2>
-
                 <h3
                   style={{
                     color: "#F39C12",
@@ -164,7 +154,6 @@ export default function Reviews() {
                 >
                   {"⭐".repeat(review.rating)}
                 </h3>
-
                 <p
                   style={{
                     marginBottom: 12,
@@ -172,26 +161,21 @@ export default function Reviews() {
                 >
                   {review.comment}
                 </p>
-
                 <p
                   style={{
                     color: "#666",
                   }}
                 >
                   <strong>Customer:</strong>{" "}
-                  {review.customer.firstName}{" "}
-                  {review.customer.lastName}
+                  {review.customer.firstName} {review.customer.lastName}
                 </p>
-
                 <p
                   style={{
                     color: "#888",
                     marginTop: 5,
                   }}
                 >
-                  {new Date(
-                    review.createdAt
-                  ).toLocaleDateString()}
+                  {new Date(review.createdAt).toLocaleDateString()}
                 </p>
               </div>
             </div>
