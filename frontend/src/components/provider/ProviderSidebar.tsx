@@ -1,8 +1,9 @@
 import "./provider.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function ProviderSidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const menu = [
     {
@@ -32,9 +33,17 @@ export default function ProviderSidebar() {
     },
   ];
 
+  const handleLogout = () => {
+    // Remove saved authentication
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    // Navigate to Home
+    navigate("/");
+  };
+
   return (
     <aside className="provider-sidebar">
-
       <div className="provider-logo">
         <h2>
           Book<span>Ease</span>
@@ -58,10 +67,12 @@ export default function ProviderSidebar() {
         ))}
       </nav>
 
-      <button className="logout-btn">
+      <button
+        className="logout-btn"
+        onClick={handleLogout}
+      >
         🚪 Logout
       </button>
-
     </aside>
   );
 }
