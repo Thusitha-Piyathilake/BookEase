@@ -1,47 +1,27 @@
-/* Make the calendar fill its container */
+/* Calendar container */
+.booking-calendar-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Calendar tiles – let react-calendar handle layout */
 .react-calendar {
   width: 100% !important;
-  max-width: 700px;
   border: none !important;
-  border-radius: 16px;
   font-family: inherit;
-  box-shadow: none !important;
   background: transparent !important;
-}
-
-/* Ensure all tiles have proper size */
-.react-calendar__tile {
-  padding: 12px 6px !important;
-  height: 70px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 15px !important;
-  border-radius: 10px !important;
-  transition: background 0.2s ease;
-}
-
-/* Weekday headers */
-.react-calendar__month-view__weekdays {
-  font-weight: 700 !important;
-  font-size: 14px !important;
-  text-transform: uppercase;
-  color: #666;
-}
-
-.react-calendar__month-view__weekdays__weekday {
-  padding: 10px 0 !important;
-}
-
-.react-calendar__month-view__weekdays__weekday abbr {
-  text-decoration: none !important;
-  font-weight: 600;
 }
 
 /* Navigation */
 .react-calendar__navigation {
   margin-bottom: 16px !important;
-  padding: 0 10px;
 }
 
 .react-calendar__navigation button {
@@ -61,24 +41,44 @@
 .react-calendar__navigation__label {
   font-size: 18px !important;
   font-weight: 700 !important;
-  color: #A31D1D !important;
 }
 
-/* Booked dates – highlight */
-.booked-date {
-  background: #D84040 !important;
-  color: #fff !important;
-  border-radius: 50% !important;
+/* Weekday headers */
+.react-calendar__month-view__weekdays {
   font-weight: 700 !important;
-  box-shadow: 0 4px 10px rgba(216, 64, 64, 0.3) !important;
-  transition: transform 0.2s ease;
+  font-size: 14px !important;
+  text-transform: uppercase;
+  color: #666;
 }
 
-.booked-date:hover {
-  transform: scale(1.08);
+.react-calendar__month-view__weekdays__weekday {
+  padding: 10px 0 !important;
 }
 
-/* Today’s date */
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none !important;
+  font-weight: 600;
+}
+
+/* Tiles – size and appearance */
+.react-calendar__tile {
+  padding: 12px 6px !important;
+  height: 70px !important;          /* fixed height to keep them square-ish */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 15px !important;
+  border-radius: 10px !important;
+  transition: background 0.2s ease;
+  background: transparent !important;
+}
+
+.react-calendar__tile:hover {
+  background: #f0e8d8 !important;
+  cursor: pointer;
+}
+
+/* Today */
 .react-calendar__tile--now {
   background: #FFF5F5 !important;
   border: 2px solid #A31D1D !important;
@@ -87,40 +87,32 @@
   color: #A31D1D !important;
 }
 
-/* Selected date */
+/* Selected / active */
 .react-calendar__tile--active {
   background: #A31D1D !important;
   color: #fff !important;
   border-radius: 50% !important;
 }
 
-/* Hover effect on tiles */
-.react-calendar__tile:hover {
-  background: #f0e8d8 !important;
-  border-radius: 10px !important;
-  cursor: pointer;
+/* Booked dates */
+.booked-date {
+  background: #D84040 !important;
+  color: #fff !important;
+  border-radius: 50% !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 10px rgba(216, 64, 64, 0.3) !important;
 }
 
-/* Ensure all tiles are visible – prevent overflow */
-.react-calendar__month-view__days {
-  display: grid !important;
-  grid-template-columns: repeat(7, 1fr) !important;
-  gap: 4px !important;
+.booked-date:hover {
+  transform: scale(1.08);
 }
 
-.react-calendar__month-view__days__day {
-  aspect-ratio: 1 / 1;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-/* Fix for empty tiles (days from other months) */
+/* Neighbouring month days (greyed out) */
 .react-calendar__month-view__days__day--neighboringMonth {
   color: #ccc !important;
-  background: transparent !important;
 }
 
+/* Weekend day text */
 .react-calendar__month-view__days__day--weekend {
   color: #A31D1D !important;
 }
