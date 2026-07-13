@@ -78,8 +78,8 @@ export default function Users() {
       <main
         style={{
           marginLeft: "260px",
-          marginTop: "90px",
-          padding: "35px",
+          marginTop: "30px",        // reduced from 90px
+          padding: "20px 35px 35px", // trimmed top padding
           background: "#F8F2DE",
           minHeight: "calc(100vh - 90px)",
         }}
