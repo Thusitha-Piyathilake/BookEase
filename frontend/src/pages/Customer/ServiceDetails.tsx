@@ -66,6 +66,32 @@ export default function ServiceDetails() {
     }
   };
 
+  // Compute tomorrow's date (YYYY-MM-DD) for the min attribute
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split("T")[0];
+
+  // Date change handler: block today & past
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.value;
+    if (selected) {
+      const selectedDate = new Date(selected);
+      const tomorrowDate = new Date(tomorrow);
+      // Reset time to midnight for fair comparison
+      selectedDate.setHours(0, 0, 0, 0);
+      tomorrowDate.setHours(0, 0, 0, 0);
+
+      if (selectedDate < tomorrowDate) {
+        // Invalid – clear the input silently (or show a brief alert)
+        setBookingDate("");
+        // Optionally notify the user
+        alert("Please select a date from tomorrow onwards.");
+        return;
+      }
+    }
+    setBookingDate(selected);
+  };
+
   if (loading) {
     return (
       <div
@@ -91,11 +117,6 @@ export default function ServiceDetails() {
       </div>
     );
   }
-
-  // Compute tomorrow's date in YYYY-MM-DD format for the min attribute
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const minDate = tomorrow.toISOString().split('T')[0];
 
   return (
     <div
@@ -214,10 +235,8 @@ export default function ServiceDetails() {
             <input
               type="date"
               value={bookingDate}
-              onChange={(e) =>
-                setBookingDate(e.target.value)
-              }
-              min={minDate}  // ← Only future dates allowed (from tomorrow onward)
+              onChange={handleDateChange}
+              min={minDate}
               style={{
                 padding: "15px",
                 borderRadius: "10px",
@@ -229,9 +248,7 @@ export default function ServiceDetails() {
             <input
               type="time"
               value={bookingTime}
-              onChange={(e) =>
-                setBookingTime(e.target.value)
-              }
+              onChange={(e) => setBookingTime(e.target.value)}
               style={{
                 padding: "15px",
                 borderRadius: "10px",
@@ -244,9 +261,7 @@ export default function ServiceDetails() {
               rows={5}
               placeholder="Additional Notes (Optional)"
               value={notes}
-              onChange={(e) =>
-                setNotes(e.target.value)
-              }
+              onChange={(e) => setNotes(e.target.value)}
               style={{
                 padding: "15px",
                 borderRadius: "10px",
