@@ -144,8 +144,8 @@ export default function Bookings() {
       <main
         style={{
           marginLeft: "260px",
-          marginTop: "55px", // reduced further to tighten the gap
-          padding: "35px",
+          marginTop: "30px", // reduced to minimum
+          padding: "20px 35px 35px", // trimmed top padding
           background: "#F8F2DE",
           minHeight: "calc(100vh - 90px)",
         }}
