@@ -8,11 +8,11 @@ export interface Booking {
   status: string;
 
   customer: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+};
 
   service: {
     id: string;

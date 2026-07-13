@@ -305,32 +305,36 @@ export default function Bookings() {
                     </h2>
 
                     <p>
-                      <strong>Customer:</strong>{" "}
-                      {booking.customer.firstName}{" "}
-                      {booking.customer.lastName}
-                    </p>
+  <strong>Customer:</strong>{" "}
+  {booking.customer.name}
+</p>
 
-                    <p>
-                      <strong>Email:</strong>{" "}
-                      {booking.customer.email}
-                    </p>
+<p>
+  <strong>Email:</strong>{" "}
+  {booking.customer.email}
+</p>
 
-                    <p>
-                      <strong>Date:</strong>{" "}
-                      {booking.bookingDate}
-                    </p>
+<p>
+  <strong>Phone:</strong>{" "}
+  {booking.customer.phone || "Not provided"}
+</p>
 
-                    <p>
-                      <strong>Time:</strong>{" "}
-                      {booking.bookingTime}
-                    </p>
+<p>
+  <strong>Date:</strong>{" "}
+  {booking.bookingDate}
+</p>
 
-                    {booking.notes && (
-                      <p>
-                        <strong>Notes:</strong>{" "}
-                        {booking.notes}
-                      </p>
-                    )}
+<p>
+  <strong>Time:</strong>{" "}
+  {booking.bookingTime}
+</p>
+
+{booking.notes && (
+  <p>
+    <strong>Notes:</strong>{" "}
+    {booking.notes}
+  </p>
+)}
                   </div>
                 </div>
 
