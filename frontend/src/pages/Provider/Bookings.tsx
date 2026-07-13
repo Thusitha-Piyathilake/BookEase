@@ -43,22 +43,23 @@ const blueButton: React.CSSProperties = {
 export default function Bookings() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null); // New error state
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
 
-  // Remove page state, use a fixed large limit
-  const limit = 1000;
+  // Use a reasonable limit – change to 200 if needed
+  const limit = 100;
 
   useEffect(() => {
     loadBookings();
-  }, [search, status]); // page removed from dependencies
+  }, [search, status]);
 
   const loadBookings = async () => {
     try {
       setLoading(true);
+      setError(null);
 
-      // Always fetch page 1 with a large limit to get all bookings
       const data = await bookingService.getProviderBookings({
         page: 1,
         limit,
@@ -66,7 +67,7 @@ export default function Bookings() {
         status,
       });
 
-      // Sort bookings: newest first (by bookingDate and bookingTime descending)
+      // Sort: newest first
       const sorted = [...data].sort((a, b) => {
         const dateA = new Date(`${a.bookingDate}T${a.bookingTime}`);
         const dateB = new Date(`${b.bookingDate}T${b.bookingTime}`);
@@ -76,15 +77,12 @@ export default function Bookings() {
       setBookings(sorted);
     } catch (error: any) {
       console.error(error);
-
-      if (error?.response?.status === 403) {
-        alert(
-          "You are not authorized to view provider bookings.\n" +
-          "Please log in as a Provider account."
-        );
-      } else {
-        alert("Failed to load bookings.");
-      }
+      // Set a user-friendly error message
+      const msg =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to load bookings. Please try again.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -218,6 +216,35 @@ export default function Bookings() {
 
         {loading ? (
           <h2>Loading...</h2>
+        ) : error ? (
+          <div
+            style={{
+              background: "#fff",
+              padding: "50px",
+              borderRadius: "18px",
+              textAlign: "center",
+              boxShadow: "0 10px 30px rgba(0,0,0,.08)",
+              border: "1px solid #ffcccc",
+            }}
+          >
+            <h2 style={{ color: "#C62828" }}>⚠️ Error</h2>
+            <p style={{ color: "#666" }}>{error}</p>
+            <button
+              onClick={() => loadBookings()}
+              style={{
+                marginTop: "20px",
+                padding: "12px 24px",
+                background: "#A31D1D",
+                color: "#fff",
+                border: "none",
+                borderRadius: "10px",
+                cursor: "pointer",
+                fontWeight: 600,
+              }}
+            >
+              Retry
+            </button>
+          </div>
         ) : bookings.length === 0 ? (
           <div
             style={{
@@ -372,8 +399,6 @@ export default function Bookings() {
                 </div>
               </div>
             ))}
-
-            {/* Pagination removed – all bookings displayed on one page */}
           </>
         )}
       </main>
