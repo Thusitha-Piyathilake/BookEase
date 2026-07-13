@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ProviderSidebar from "../../components/provider/ProviderSidebar";
@@ -14,9 +14,9 @@ export default function MyServices() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Search & filter states
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterCategory, setFilterCategory] = useState("All");
+  // NEW
+  const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
 
   const loadServices = async () => {
     try {
@@ -55,21 +55,37 @@ export default function MyServices() {
     }
   };
 
-  // Extract unique categories for the filter dropdown
-  const categories = [
-    "All",
-    ...new Set(services.map((s) => s.category).filter(Boolean)),
-  ];
+  // Categories
+  const categories = useMemo(() => {
+    return [
+      "All",
+      ...Array.from(
+        new Set(services.map((s) => s.category))
+      ),
+    ];
+  }, [services]);
 
-  // Apply search and filter
-  const filteredServices = services.filter((service) => {
-    const matchesSearch = service.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      filterCategory === "All" || service.category === filterCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Filtered Services
+  const filteredServices = useMemo(() => {
+    return services.filter((service) => {
+      const matchesSearch =
+        service.title
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        service.category
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        service.location
+          .toLowerCase()
+          .includes(search.toLowerCase());
+
+      const matchesCategory =
+        categoryFilter === "All" ||
+        service.category === categoryFilter;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [services, search, categoryFilter]);
 
   return (
     <>
@@ -85,6 +101,8 @@ export default function MyServices() {
           minHeight: "calc(100vh - 90px)",
         }}
       >
+        {/* Header */}
+
         <div
           style={{
             display: "flex",
@@ -103,11 +121,7 @@ export default function MyServices() {
               My Services
             </h1>
 
-            <p
-              style={{
-                color: "#666",
-              }}
-            >
+            <p style={{ color: "#666" }}>
               Manage all the services you offer.
             </p>
           </div>
@@ -123,83 +137,135 @@ export default function MyServices() {
               fontWeight: 600,
               fontSize: "15px",
             }}
-            onClick={() => navigate("/provider/add-service")}
+            onClick={() =>
+              navigate("/provider/add-service")
+            }
           >
             + Add Service
           </button>
         </div>
 
-        {/* Search and Filter Bar */}
-        <div
-          style={{
-            display: "flex",
-            gap: "16px",
-            marginBottom: "24px",
-            alignItems: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          <input
-            type="text"
-            placeholder="Search services by title..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+        {/* Search & Filter */}
+
+        {!loading && services.length > 0 && (
+          <div
             style={{
-              flex: 1,
-              minWidth: "200px",
-              padding: "10px 16px",
-              borderRadius: "8px",
-              border: "1px solid #ddd",
-              fontSize: "14px",
               background: "#fff",
-            }}
-          />
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            style={{
-              padding: "10px 16px",
-              borderRadius: "8px",
-              border: "1px solid #ddd",
-              fontSize: "14px",
-              background: "#fff",
-              minWidth: "150px",
+              padding: "20px",
+              borderRadius: "16px",
+              marginBottom: "25px",
+              display: "flex",
+              gap: "15px",
+              alignItems: "center",
+              flexWrap: "wrap",
+              boxShadow:
+                "0 10px 25px rgba(0,0,0,.08)",
             }}
           >
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
+            <input
+              type="text"
+              placeholder="🔍 Search services..."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+              style={{
+                flex: 1,
+                minWidth: "280px",
+                padding: "13px 16px",
+                borderRadius: "10px",
+                border: "1px solid #ddd",
+                fontSize: "15px",
+                outline: "none",
+              }}
+            />
+
+            <select
+              value={categoryFilter}
+              onChange={(e) =>
+                setCategoryFilter(e.target.value)
+              }
+              style={{
+                padding: "13px 16px",
+                borderRadius: "10px",
+                border: "1px solid #ddd",
+                fontSize: "15px",
+                minWidth: "220px",
+                cursor: "pointer",
+              }}
+            >
+              {categories.map((category) => (
+                <option
+                  key={category}
+                  value={category}
+                >
+                  {category}
+                </option>
+              ))}
+            </select>
+
+            <div
+              style={{
+                background: "#F8F2DE",
+                color: "#A31D1D",
+                padding: "12px 18px",
+                borderRadius: "10px",
+                fontWeight: 700,
+              }}
+            >
+              {filteredServices.length} Service
+              {filteredServices.length !== 1 && "s"}
+            </div>
+          </div>
+        )}
+
+        {/* Loading */}
 
         {loading ? (
           <h3>Loading services...</h3>
-        ) : filteredServices.length === 0 ? (
+        ) : services.length === 0 ? (
           <div
             style={{
               background: "#fff",
               padding: "40px",
               borderRadius: "16px",
               textAlign: "center",
-              boxShadow: "0 10px 30px rgba(0,0,0,.08)",
+              boxShadow:
+                "0 10px 30px rgba(0,0,0,.08)",
             }}
           >
-            <h2>
-              {services.length === 0
-                ? "No services found"
-                : "No matching services"}
-            </h2>
+            <h2>No services found</h2>
+
             <p
               style={{
                 color: "#666",
                 marginTop: "10px",
               }}
             >
-              {services.length === 0
-                ? 'Click "Add Service" to create your first service.'
-                : "Try adjusting your search or filter criteria."}
+              Click "Add Service" to create your
+              first service.
+            </p>
+          </div>
+        ) : filteredServices.length === 0 ? (
+          <div
+            style={{
+              background: "#fff",
+              padding: "50px",
+              borderRadius: "16px",
+              textAlign: "center",
+              boxShadow:
+                "0 10px 30px rgba(0,0,0,.08)",
+            }}
+          >
+            <h2>No matching services</h2>
+
+            <p
+              style={{
+                color: "#666",
+                marginTop: "10px",
+              }}
+            >
+              Try another keyword or category.
             </p>
           </div>
         ) : (
@@ -214,9 +280,13 @@ export default function MyServices() {
               category={service.category}
               price={service.price}
               onEdit={() =>
-                navigate(`/provider/edit-service/${service.id}`)
+                navigate(
+                  `/provider/edit-service/${service.id}`
+                )
               }
-              onDelete={() => handleDelete(service.id)}
+              onDelete={() =>
+                handleDelete(service.id)
+              }
             />
           ))
         )}
