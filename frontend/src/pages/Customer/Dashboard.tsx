@@ -160,24 +160,7 @@ export default function CustomerDashboard() {
   );
 }
 
-const cardStyle: React.CSSProperties = {
-  background: "#fff",
-  borderRadius: "18px",
-  padding: "28px",
-  boxShadow: "0 10px 25px rgba(0,0,0,.08)",
-};
 
-const buttonStyle: React.CSSProperties = {
-  marginTop: "20px",
-  background: "#D84040",
-  color: "#fff",
-  border: "none",
-  padding: "14px 22px",
-  borderRadius: "10px",
-  cursor: "pointer",
-  fontWeight: 600,
-  fontSize: "15px",
-};
 
 const badgeStyle: React.CSSProperties = {
   background: "#FFF5F5",
