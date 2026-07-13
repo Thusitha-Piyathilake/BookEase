@@ -27,6 +27,10 @@ import AdminReviews from "../pages/admin/Reviews";
 import About from "../pages/About/About";
 import Contact from "../pages/Contact/Contact";
 
+import HomeServices from "../pages/HomeServices/HomeServices";
+
+
+
 
 export default function AppRoutes() {
   return (
@@ -50,6 +54,8 @@ export default function AppRoutes() {
           path="/customer/services"
           element={<Services />}
         />
+
+        <Route path="/services" element={<HomeServices />} />
 
         <Route
           path="/customer/service/:id"
