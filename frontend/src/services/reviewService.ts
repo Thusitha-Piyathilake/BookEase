@@ -7,15 +7,15 @@ export interface Review {
   createdAt: string;
 
   customer: {
-    id: string;
-    firstName: string;
-    lastName: string;
-  };
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+}
 
   provider: {
     id: string;
-    firstName: string;
-    lastName: string;
+    name: string;
   };
 
   service: {

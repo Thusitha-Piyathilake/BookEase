@@ -167,7 +167,7 @@ export default function Reviews() {
                   }}
                 >
                   <strong>Customer:</strong>{" "}
-                  {review.customer.firstName} {review.customer.lastName}
+                  {review.customer.name}
                 </p>
                 <p
                   style={{

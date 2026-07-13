@@ -123,8 +123,8 @@ export default function Reviews() {
                         marginTop: "5px",
                       }}
                     >
-                      Provider: {review.provider.firstName}{" "}
-                      {review.provider.lastName}
+                      Provider: 
+                      {review.provider.name}
                     </p>
                   </div>
 
