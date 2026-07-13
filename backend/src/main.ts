@@ -60,19 +60,19 @@ async function bootstrap() {
   );
 
   const port =
-    process.env.PORT ?? 5000;
+    Number(process.env.PORT) || 5000;
 
   await app.listen(
     port,
-    '127.0.0.1',
+    '0.0.0.0',
   );
 
   console.log(
-    `🚀 BookEase API running at http://127.0.0.1:${port}`,
+    `🚀 BookEase API running on port ${port}`,
   );
 
   console.log(
-    `📚 Swagger Documentation: http://127.0.0.1:${port}/api`,
+    `📚 Swagger Documentation available at /api`,
   );
 }
 
