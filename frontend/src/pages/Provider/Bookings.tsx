@@ -43,12 +43,11 @@ const blueButton: React.CSSProperties = {
 export default function Bookings() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null); // New error state
+  const [error, setError] = useState<string | null>(null);
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
 
-  // Use a reasonable limit – change to 200 if needed
   const limit = 100;
 
   useEffect(() => {
@@ -67,7 +66,6 @@ export default function Bookings() {
         status,
       });
 
-      // Sort: newest first
       const sorted = [...data].sort((a, b) => {
         const dateA = new Date(`${a.bookingDate}T${a.bookingTime}`);
         const dateB = new Date(`${b.bookingDate}T${b.bookingTime}`);
@@ -77,7 +75,6 @@ export default function Bookings() {
       setBookings(sorted);
     } catch (error: any) {
       console.error(error);
-      // Set a user-friendly error message
       const msg =
         error?.response?.data?.message ||
         error?.message ||
@@ -147,7 +144,7 @@ export default function Bookings() {
       <main
         style={{
           marginLeft: "260px",
-          marginTop: "75px", // reduced from 90px to decrease gap
+          marginTop: "55px", // reduced further to tighten the gap
           padding: "35px",
           background: "#F8F2DE",
           minHeight: "calc(100vh - 90px)",
