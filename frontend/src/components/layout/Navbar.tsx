@@ -23,6 +23,7 @@ export default function Navbar() {
           <a href="#services">Services</a>
           <Link to="/about">About</Link>       {/* changed to Link */}
           <Link to="/contact">Contact</Link>   {/* changed to Link */}
+          <Link to="/services">Services</Link>
         </nav>
 
         <div className="nav-buttons">
