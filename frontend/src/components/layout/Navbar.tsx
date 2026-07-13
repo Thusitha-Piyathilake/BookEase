@@ -21,8 +21,8 @@ export default function Navbar() {
         <nav className="nav-links">
           <Link to="/">Home</Link>
           <a href="#services">Services</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+          <Link to="/about">About</Link>       {/* changed to Link */}
+          <Link to="/contact">Contact</Link>   {/* changed to Link */}
         </nav>
 
         <div className="nav-buttons">

@@ -24,6 +24,8 @@ import AdminDashboard from "../pages/admin/Dashboard";
 import AdminUsers from "../pages/admin/Users";
 import AdminServices from "../pages/admin/Services";
 import AdminReviews from "../pages/admin/Reviews";
+import About from "../pages/About/About";
+import Contact from "../pages/Contact/Contact";
 
 
 export default function AppRoutes() {
@@ -40,6 +42,9 @@ export default function AppRoutes() {
           path="/customer/dashboard"
           element={<CustomerDashboard />}
         />
+
+        <Route path="/about" element={<About />} />
+<Route path="/contact" element={<Contact />} />
 
         <Route
           path="/customer/services"
