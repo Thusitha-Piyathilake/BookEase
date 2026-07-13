@@ -29,7 +29,7 @@ import { AdminModule } from './admin/admin.module';
 
         autoLoadEntities: true,
 
-        synchronize: true,
+        synchronize: false,
       }),
     }),
 
